@@ -21,7 +21,10 @@ const Header = () => {
       </div>
 
       <div className="flex items-center space-x-7">
-        <div className="text-white text-3xl relative">
+        <div
+          className="text-white text-3xl relative"
+          onClick={() => navigate("/alerts")}
+        >
           <div className="absolute -top-1 -left-1 bg-red-500 px-2 py-1 text-sm rounded-full">
             <p>5</p>
           </div>

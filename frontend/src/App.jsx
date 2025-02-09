@@ -12,8 +12,8 @@ function App() {
           <Route index element={<Homepage />} />
         </Route>
 
-        <Route path="*" element={<UserRoutes />} />
-        <Route path="/*" element={<AdminRoutes />} />
+        <Route path="/*" element={<UserRoutes />} />
+        <Route path="/admin/*" element={<AdminRoutes />} />
       </Routes>
     </BrowserRouter>
   );
