@@ -58,7 +58,10 @@ const Header = () => {
           )}
         </div>
 
-        <button className="bg-[#FEE715] px-5 py-1 text-lg font-medium rounded-md">
+        <button
+          onClick={() => navigate("/login")}
+          className="bg-[#FEE715] px-5 py-1 text-lg font-medium rounded-md"
+        >
           Login
         </button>
       </div>

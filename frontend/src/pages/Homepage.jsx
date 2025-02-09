@@ -1,4 +1,5 @@
 import { useNavigate } from "react-router-dom";
+import heroImage from "../assets/hero-image.png";
 
 const Homepage = () => {
   const navigate = useNavigate();
@@ -26,7 +27,13 @@ const Homepage = () => {
       </div>
 
       {/* Right portion */}
-      <div className="flex-[0.5]"></div>
+      <div className="flex-[0.5] w-full h-full">
+        <img
+          src={heroImage}
+          alt="Hero sports image"
+          className="w-full h-full object-contain"
+        />
+      </div>
     </div>
   );
 };

@@ -2,6 +2,10 @@ const TeamCard = ({ teamColor }) => {
   return <div className={`w-full h-full ${teamColor}`}></div>;
 };
 
+const playerCard = () => {
+  return <div></div>;
+};
+
 const EventPage = () => {
   return (
     <div className="w-full h-full flex flex-1 flex-col pt-6">
