@@ -6,6 +6,7 @@ import ModifyEvents from "./ModifiyEvents";
 import AddCoins from "./AddCoins";
 import ChangeQR from "./ChangeQR";
 import Users from "./AddUsers";
+import Layout from "../../Layout";
 
 const AdminRoutes = () => {
   return (

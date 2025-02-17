@@ -1,6 +1,6 @@
 const Login = () => {
   return (
-    <div className="w-full h-full flex items-center justify-center">
+    <div className="w-full h-screen flex items-center justify-center">
       <div className="w-1/3 text-center space-y-7">
         <h1 className="text-white text-3xl">Admin Login</h1>
 

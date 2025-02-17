@@ -2,6 +2,8 @@ import { Tab, Tabs } from "@mui/material";
 import InputField from "../../components/InputField";
 import { useState } from "react";
 import SearchIcon from "@mui/icons-material/Search";
+import PersonSharpIcon from "@mui/icons-material/PersonSharp";
+import coinSVG from "../../assets/coin.svg";
 
 const a11yProps = (index) => {
   return {
@@ -43,6 +45,33 @@ const AddUsers = () => {
   );
 };
 
+const UserCard = () => {
+  return (
+    <div className="flex items-center justify-between border-b border-slate-800 pb-3">
+      <div className="flex items-center space-x-4">
+        <div className="text-white text-4xl">
+          <PersonSharpIcon color="inherit" fontSize="inherit" />
+        </div>
+
+        <div>
+          <p className="text-white font-semibold text-xl">Ronak Paul</p>
+          <p className="text-white font-light">ronak@gmail.com</p>
+        </div>
+      </div>
+
+      <div className="flex items-center space-x-10">
+        <div className="flex items-center space-x-3 text-white">
+          <img width={20} height={20} src={coinSVG} alt="coin svg icon" />
+          <p>500</p>
+        </div>
+        <div className="bg-slate-100 rounded-full px-3 py-2 cursor-pointer">
+          <p className="text-xs">View Transactions</p>
+        </div>
+      </div>
+    </div>
+  );
+};
+
 const AllUsers = () => {
   return (
     <div className="w-full h-full pt-8">
@@ -59,6 +88,13 @@ const AllUsers = () => {
         <button className="bg-[#FEE715] px-7 py-1 mx-2 font-medium rounded-full w-fit">
           Search
         </button>
+      </div>
+
+      <div className="flex flex-col space-y-7 my-10">
+        <UserCard />
+        <UserCard />
+        <UserCard />
+        <UserCard />
       </div>
     </div>
   );

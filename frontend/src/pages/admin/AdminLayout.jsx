@@ -23,7 +23,23 @@ const AdminLayout = () => {
   return (
     <div className="w-full h-screen flex flex-1 flex-col overflow-y-hidden">
       <div className="flex-[0.1] h-full">
-        <Header />
+        <header className="flex items-center justify-between px-7 py-5">
+          <div>
+            <h1
+              onClick={() => navigate("/")}
+              className="text-white text-3xl cursor-pointer"
+            >
+              Gambling
+            </h1>
+          </div>
+
+          <button
+            onClick={() => navigate("/login")}
+            className="bg-[#FEE715] px-5 py-1 text-lg font-medium rounded-md"
+          >
+            Login
+          </button>
+        </header>
       </div>
 
       <div className="flex-[0.9] h-full flex">

@@ -1,6 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import EventCard from "../../components/EventCard";
 import ChevronRightSharpIcon from "@mui/icons-material/ChevronRightSharp";
+import LiveAlerts from "../../components/LiveAlerts";
 
 const Dashboard = () => {
   const navigate = useNavigate();
@@ -23,6 +24,10 @@ const Dashboard = () => {
           <EventCard />
           <EventCard />
         </div>
+      </div>
+
+      <div>
+        <LiveAlerts />
       </div>
     </div>
   );
