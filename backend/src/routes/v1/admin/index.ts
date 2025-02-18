@@ -12,13 +12,18 @@ import { checkAuth } from "../../../controllers/admin/checkAuth.controller";
 import { handleRefreshAccessToken } from "../../../utils/handleRefreshToken";
 import { createadmin } from "../../../controllers/admin/createadmin.controller";
 import { handleLogout } from "../../../controllers/handleLogout.controller";
+import { getAllEvents } from "../../../controllers/admin/getAllEvents.controller";
+import upload from "../../../middlewares/fileUpload.middleware";
+import { fileToS3, S3PATHS } from "../../../middlewares/fileToS3.middleware";
+import { playerProfileUpload } from "../../../controllers/admin/playerProfileUpload.controller";
 
 const router = Router();
 
 // GET ENDPOINTS
 // -----------------
-router.route("/users").get(getUsers);
+router.route("/users").get(authMiddleware(AUTH_ROLES.ADMIN), getUsers);
 router.route("/check-auth").get(authMiddleware(AUTH_ROLES.ADMIN), checkAuth);
+router.route("/all-events").get(authMiddleware(AUTH_ROLES.ADMIN), getAllEvents);
 
 // POST ENDPOINTS
 // -----------------
@@ -27,11 +32,18 @@ router
   .route("/logout")
   .post(authMiddleware(AUTH_ROLES.ADMIN), handleLogout(AUTH_ROLES.ADMIN));
 router.route("/refresh-token").post(handleRefreshAccessToken(AUTH_ROLES.ADMIN));
-router.route("/add-user").post(addUser);
-router.route("/add-event").post(addEvent);
-router.route("/add-coins").post(addCoins);
+router.route("/add-user").post(authMiddleware(AUTH_ROLES.ADMIN), addUser);
+router.route("/add-event").post(authMiddleware(AUTH_ROLES.ADMIN), addEvent);
+router.route("/add-coins").post(authMiddleware(AUTH_ROLES.ADMIN), addCoins);
 router.route("/modify-event").post(modifyEvent);
 router.route("/change-qr").post(changeQR);
+router
+  .route("/upload-profile")
+  .post(
+    upload.single("playerImg"),
+    fileToS3(S3PATHS.PLAYER_IMG),
+    playerProfileUpload
+  );
 
 // temporary routes
 // router.route("/create-admin").post(createadmin);

@@ -7,11 +7,20 @@ export const addEvent = asyncHandler(async (req: Request, res: Response) => {
   const team1 = req.body.team1;
   const team2 = req.body.team2;
   const date = req.body.date;
-  const timing = req.body.timing;
+  const startTime = req.body.startTime;
+  const endTime = req.body.endTime;
   const prizePool = req.body.prizePool;
 
   // Input validation
-  if (!sportName || !team1 || !team2 || !date || !timing || !prizePool) {
+  if (
+    !sportName ||
+    !team1 ||
+    !team2 ||
+    !date ||
+    !startTime ||
+    !endTime ||
+    !prizePool
+  ) {
     return res
       .status(400)
       .json({ message: "All info is needed to create a event" });
@@ -23,7 +32,8 @@ export const addEvent = asyncHandler(async (req: Request, res: Response) => {
       team1,
       team2,
       date,
-      timing,
+      startTime,
+      endTime,
       prizePool,
     });
 

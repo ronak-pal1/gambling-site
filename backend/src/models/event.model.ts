@@ -11,7 +11,8 @@ export interface IEvent extends Document {
   team1: Team;
   team2: Team;
   date: Date;
-  timing: string;
+  startTime: string;
+  endTime: string;
   prizePool: number;
 }
 
@@ -82,7 +83,12 @@ const EventSchema: Schema<IEvent> = new Schema<IEvent>(
       type: Date,
       required: true,
     },
-    timing: {
+    startTime: {
+      type: String,
+      required: true,
+      trim: true,
+    },
+    endTime: {
       type: String,
       required: true,
       trim: true,

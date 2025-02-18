@@ -6,6 +6,7 @@ declare global {
     interface Request {
       user?: UserModel;
       admin?: AdminModel;
+      fileURL?: string;
     }
   }
 }
