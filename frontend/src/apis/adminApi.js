@@ -1,3 +1,5 @@
+import axios from "axios";
+
 const adminApi = axios.create({
   baseURL: import.meta.env.VITE_BACKEND_BASE_URL + "/admin",
   withCredentials: true,
