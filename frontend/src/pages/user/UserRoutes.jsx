@@ -9,12 +9,13 @@ import Alerts from "./Alerts";
 function UserRoutes() {
   return (
     <Routes>
+      <Route path="/login" element={<Login />} />
+      <Route path="/*" element={<Navigate to={"/dashboard"} />} />
+
       <Route element={<UserLayout />}>
-        <Route path="/*" element={<Navigate to={"/dashboard"} />} />
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/dashboard/all-events" element={<AllEvents />} />
         <Route path="/event" element={<EventPage />} />
-        <Route path="/login" element={<Login />} />
         <Route path="/alerts" element={<Alerts />} />
       </Route>
     </Routes>

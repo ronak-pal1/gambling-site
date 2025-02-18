@@ -10,7 +10,7 @@ const Dashboard = () => {
     <div className="w-full h-full px-10 py-7 overflow-y-auto  pb-24 custom-scrollbar space-y-14">
       <div>
         <div className="flex w-full justify-between">
-          <h1 className="text-white text-2xl mb-7 font-medium">Trending</h1>
+          <h1 className="text-white text-2xl mb-7 font-medium">Ongoing</h1>
 
           <button
             onClick={() => navigate("/dashboard/all-events")}

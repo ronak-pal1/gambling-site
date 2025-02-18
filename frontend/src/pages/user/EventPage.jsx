@@ -26,12 +26,16 @@ const TeamCard = ({ teamPosition, setIsBettingModalOpen }) => {
       {/* all player section */}
       <div
         className={`absolute w-full h-full top-0 left-0 z-30  flex items-center  ${
-          teamPosition == "left"
+          isPlayersContainerOpen
+            ? teamPosition == "left"
+              ? "-translate-0 justify-start"
+              : "translate-x-0 justify-end"
+            : teamPosition == "left"
             ? "-translate-x-full justify-start"
             : "translate-x-full justify-end"
-        } ${
-          isPlayersContainerOpen && "translate-x-0"
-        } transition-transform duration-500`}
+        }
+         
+        transition-transform duration-500`}
       >
         <div
           className={` w-[93%] h-[95%] bg-slate-100  px-3 py-3 ${
@@ -62,13 +66,18 @@ const TeamCard = ({ teamPosition, setIsBettingModalOpen }) => {
         <h1 className="text-white text-3xl">NIET</h1>
       </div>
 
-      <div className="w-full flex justify-center my-3">
+      <div className="w-full flex flex-col items-center justify-center my-3">
         <button
           onClick={() => setIsPlayerContainerOpen(true)}
           className="bg-slate-200 px-5 py-1 text-lg rounded-md w-fit text-black "
         >
           Show all players
         </button>
+
+        <div className="items-center mt-10 space-y-7">
+          <h2 className="text-white text-4xl">Odds</h2>
+          <p className="text-yellow-300 text-8xl">7x</p>
+        </div>
       </div>
 
       <div className="w-full absolute bottom-7 left-0 flex justify-center z-10">
@@ -133,7 +142,7 @@ const EventPage = () => {
         </div>
       </Modal>
 
-      <div className="flex-1 w-full h-full flex items-center">
+      <div className="flex-1 w-full h-full flex items-center overflow-x-hidden">
         <div className="flex-[0.4] w-full h-full [&>div]:rounded-r-lg">
           <TeamCard
             teamPosition={"left"}
