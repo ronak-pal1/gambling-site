@@ -5,6 +5,8 @@ import { getCurrentUser } from "../../../controllers/user/getCurrentUser.control
 import { authMiddleware } from "../../../middlewares/auth.middleware";
 import { AUTH_ROLES } from "../../../utils/roles";
 import { getSingleEvent } from "../../../controllers/user/getSingleEvent.controller";
+import { handleRefreshAccessToken } from "../../../utils/handleRefreshToken";
+import { handleLogout } from "../../../controllers/handleLogout.controller";
 
 const router = Router();
 
@@ -17,5 +19,9 @@ router.route("/event/:id").get(getSingleEvent);
 // POST ENDPOINTS
 // ----------------
 router.route("/login").post(login);
+router
+  .route("/logout")
+  .post(authMiddleware(AUTH_ROLES.USER), handleLogout(AUTH_ROLES.USER));
+router.route("/refresh-token").post(handleRefreshAccessToken(AUTH_ROLES.USER));
 
 export default router;

@@ -18,30 +18,30 @@ export interface IEvent extends Document {
 const EventSchema: Schema<IEvent> = new Schema<IEvent>(
   {
     sportName: {
-      type: "string",
+      type: String,
       required: true,
       trim: true,
     },
     team1: {
       teamName: {
-        type: "string",
+        type: String,
         required: true,
         trim: true,
       },
       players: [
         {
           name: {
-            type: "string",
+            type: String,
             required: true,
             trim: true,
           },
           role: {
-            type: "string",
+            type: String,
             required: true,
             trim: true,
           },
           img: {
-            type: "string",
+            type: String,
             required: true,
             trim: true,
           },
@@ -50,42 +50,45 @@ const EventSchema: Schema<IEvent> = new Schema<IEvent>(
     },
     team2: {
       teamName: {
-        type: "string",
+        type: String,
         required: true,
         trim: true,
       },
       players: [
         {
           name: {
-            type: "string",
+            type: String,
             required: true,
             trim: true,
           },
           role: {
-            type: "string",
+            type: String,
             required: true,
             trim: true,
           },
           img: {
-            type: "string",
+            type: String,
             required: true,
             trim: true,
           },
         },
       ],
+      odds: {
+        type: Number,
+      },
     },
 
     date: {
-      type: "Date",
+      type: Date,
       required: true,
     },
     timing: {
-      type: "string",
+      type: String,
       required: true,
       trim: true,
     },
     prizePool: {
-      type: "number",
+      type: Number,
       required: true,
     },
   },
