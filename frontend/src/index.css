@@ -16,3 +16,12 @@ body {
 .custom-scrollbar::-webkit-scrollbar-thumb {
   background-color: rgb(62, 87, 227);
 }
+
+.custom-scrollbar-light::-webkit-scrollbar {
+  width: 4px;
+  background-color: rgb(67, 67, 67);
+}
+
+.custom-scrollbar-light::-webkit-scrollbar-thumb {
+  background-color: rgb(62, 87, 227);
+}

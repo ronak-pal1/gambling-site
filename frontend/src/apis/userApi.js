@@ -23,11 +23,7 @@ userApi.interceptors.response.use(
     return response;
   },
   async (error) => {
-    const originalRequest =
-      error.config &
-      {
-        _retry,
-      };
+    const originalRequest = error.config;
 
     // If we get a 401 Unauthorized error, try to refresh the tokens
     if (error.response?.status === 401 && !originalRequest._retry) {
