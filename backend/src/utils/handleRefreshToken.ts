@@ -21,6 +21,12 @@ export const handleRefreshAccessToken = (requiredRole: AUTH_ROLES) => {
           process.env.REFRESH_TOKEN_SECRET as string
         ) as JwtPayload;
 
+        if (decodedToken?.exp)
+          console.log(
+            "Decoded Token Expiry:",
+            new Date(decodedToken?.exp * 1000)
+          );
+
         let InstanceModel: any = UserModel;
 
         if (decodedToken?.role == AUTH_ROLES.ADMIN) InstanceModel = AdminModel;
@@ -39,10 +45,35 @@ export const handleRefreshAccessToken = (requiredRole: AUTH_ROLES) => {
           httpOnly: true,
           secure: process.env.NODE_ENV === "production",
           // sameSite: "strict",
+          maxAge: 4 * 24 * 60 * 60 * 1000,
         };
 
         const accessToken = instance.generateAccessToken();
         const refreshToken = instance.generateRefreshToken();
+
+        if (requiredRole == AUTH_ROLES.ADMIN) {
+          await AdminModel.updateOne(
+            {
+              _id: decodedToken?._id,
+            },
+            {
+              $set: {
+                refreshToken,
+              },
+            }
+          );
+        } else if (requiredRole == AUTH_ROLES.USER) {
+          await UserModel.updateOne(
+            {
+              _id: decodedToken?._id,
+            },
+            {
+              $set: {
+                refreshToken,
+              },
+            }
+          );
+        }
 
         return res
           .status(200)

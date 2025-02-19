@@ -1,6 +1,9 @@
 import { Router } from "express";
 import { login } from "../../../controllers/user/login.controller";
-import { getEvents } from "../../../controllers/user/getEvents.controller";
+import {
+  getAllEvents,
+  getOngoingEvents,
+} from "../../../controllers/user/getEvents.controller";
 import { getCurrentUser } from "../../../controllers/user/getCurrentUser.controller";
 import { authMiddleware } from "../../../middlewares/auth.middleware";
 import { AUTH_ROLES } from "../../../utils/roles";
@@ -12,10 +15,12 @@ const router = Router();
 
 // GET ENDPOINTS
 // ----------------
-router.route("/events").get(getEvents);
+router.route("/events").get(authMiddleware(AUTH_ROLES.USER), getAllEvents);
+router
+  .route("/ongoing-events")
+  .get(authMiddleware(AUTH_ROLES.USER), getOngoingEvents);
 router.route("/get-user").get(authMiddleware(AUTH_ROLES.USER), getCurrentUser);
-router.route("/event/:id").get(getSingleEvent);
-
+router.route("/event/:id").get(authMiddleware(AUTH_ROLES.USER), getSingleEvent);
 // POST ENDPOINTS
 // ----------------
 router.route("/login").post(login);

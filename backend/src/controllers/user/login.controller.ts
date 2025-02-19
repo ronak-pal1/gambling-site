@@ -30,19 +30,30 @@ export const login = asyncHandler(async (req: Request, res: Response) => {
     const accessToken = user.generateAccessToken();
     const refreshToken = user.generateRefreshToken();
 
+    await UserModel.updateOne(
+      {
+        email,
+      },
+      {
+        $set: {
+          refreshToken,
+        },
+      }
+    );
+
     res
       .status(200)
       .cookie("accessToken", accessToken, {
         httpOnly: true,
         secure: process.env.NODE_ENV === "production",
         sameSite: "strict",
-        maxAge: 24 * 60 * 60 * 1000,
+        maxAge: 15 * 60 * 1000,
       })
       .cookie("refreshToken", refreshToken, {
         httpOnly: true,
         secure: process.env.NODE_ENV === "production",
         sameSite: "strict",
-        maxAge: 7 * 24 * 60 * 60 * 1000,
+        maxAge: 4 * 24 * 60 * 60 * 1000,
       })
       .json({
         message: "Login successful.",

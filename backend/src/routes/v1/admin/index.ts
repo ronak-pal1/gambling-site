@@ -16,6 +16,7 @@ import { getAllEvents } from "../../../controllers/admin/getAllEvents.controller
 import upload from "../../../middlewares/fileUpload.middleware";
 import { fileToS3, S3PATHS } from "../../../middlewares/fileToS3.middleware";
 import { playerProfileUpload } from "../../../controllers/admin/playerProfileUpload.controller";
+import { deleteProfileImg } from "../../../controllers/admin/deleteProfileImg.controller";
 
 const router = Router();
 
@@ -40,10 +41,15 @@ router.route("/change-qr").post(changeQR);
 router
   .route("/upload-profile")
   .post(
+    authMiddleware(AUTH_ROLES.ADMIN),
     upload.single("playerImg"),
     fileToS3(S3PATHS.PLAYER_IMG),
     playerProfileUpload
   );
+
+router
+  .route("/delete-profile")
+  .post(authMiddleware(AUTH_ROLES.ADMIN), deleteProfileImg);
 
 // temporary routes
 // router.route("/create-admin").post(createadmin);

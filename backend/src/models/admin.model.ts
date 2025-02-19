@@ -52,7 +52,7 @@ AdminSchema.methods.generateAccessToken = function () {
     },
     process.env.ACCESS_TOKEN_SECRET as string,
     {
-      expiresIn: Number(process.env.ACCESS_TOKEN_EXPIRATION),
+      expiresIn: "15m",
     }
   );
 };
@@ -66,7 +66,7 @@ AdminSchema.methods.generateRefreshToken = function () {
     },
     process.env.REFRESH_TOKEN_SECRET as string,
     {
-      expiresIn: Number(process.env.REFRESH_TOKEN_EXPIRATION),
+      expiresIn: "4d",
     }
   );
 };
