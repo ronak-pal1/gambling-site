@@ -3,14 +3,39 @@ import InputField from "../../components/InputField";
 import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
 import { useSnackbar } from "../../hooks/SnackBarContext";
 import adminApi from "../../apis/adminApi";
+import { CircularProgress } from "@mui/material";
 
-const PlayerCard = ({ name, position, removePlayer }) => {
+const PlayerCard = ({ name, position, imgURL, removePlayer }) => {
+  const { showSnackbar } = useSnackbar();
+  const [isRemoving, setIsRemoving] = useState(false);
+
+  const removeProfile = async () => {
+    if (isRemoving) return;
+
+    setIsRemoving(true);
+    try {
+      const res = await adminApi.post("/delete-profile", {
+        url: imgURL,
+      });
+
+      if (res.status == 200) {
+        removePlayer(name);
+
+        showSnackbar("Player is removed successfully", "success");
+      }
+    } catch (e) {
+      showSnackbar("Error in removing the player", "error");
+    }
+
+    setIsRemoving(false);
+  };
+
   return (
     <div className="flex items-center justify-between border-b border-slate-800 pb-2">
       <div className="flex items-center space-x-3">
         <img
-          src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTA5wU_GaflQCQv8QLqBIfCr9-Ki2bYYpIPdg&s"
-          alt=""
+          src={imgURL}
+          alt="profile"
           className="w-10 h-10 object-cover rounded-full"
         />
         <div className="text-white flex flex-col">
@@ -20,12 +45,16 @@ const PlayerCard = ({ name, position, removePlayer }) => {
       </div>
 
       <div>
-        <div
-          onClick={() => removePlayer(name)}
-          className="text-white text-2xl cursor-pointer"
-        >
-          <CloseRoundedIcon color="inherit" fontSize="inherit" />
-        </div>
+        {isRemoving ? (
+          <CircularProgress size={"25px"} />
+        ) : (
+          <div
+            onClick={removeProfile}
+            className="text-white text-2xl cursor-pointer"
+          >
+            <CloseRoundedIcon color="inherit" fontSize="inherit" />
+          </div>
+        )}
       </div>
     </div>
   );
@@ -42,6 +71,7 @@ const TeamAddSection = ({
 
   const [imgFile, setImgFile] = useState(undefined);
   const [imgURL, setImgURL] = useState("");
+  const [isImgUploading, setIsImgUploading] = useState(false);
 
   const [playerName, setPlayerName] = useState("");
   const [position, setPosition] = useState("");
@@ -65,6 +95,7 @@ const TeamAddSection = ({
     setPlayerName("");
     setPosition("");
     setImgURL("");
+    setImgFile(undefined);
   };
 
   const removePlayer = (name) => {
@@ -79,6 +110,10 @@ const TeamAddSection = ({
     const formData = new FormData();
     formData.append("playerImg", imgFile);
 
+    if (imgURL) formData.append("previousURL", imgURL);
+
+    setIsImgUploading(true);
+
     try {
       const res = await adminApi.post("/upload-profile", formData);
 
@@ -90,6 +125,8 @@ const TeamAddSection = ({
     } catch (e) {
       showSnackbar("Error in uploading profile image", "error");
     }
+
+    setIsImgUploading(false);
   };
 
   useEffect(() => {
@@ -119,7 +156,7 @@ const TeamAddSection = ({
               ref={inputRef}
               type="file"
               className="hidden"
-              accept="image/png"
+              accept="image/png, image/jpg"
             />
 
             <div className="flex items-center space-x-4">
@@ -129,7 +166,12 @@ const TeamAddSection = ({
               >
                 {imgFile ? "Change Profile image" : "Add Profile image"}
               </div>
-              {imgFile && <p className=" text-slate-300">{imgFile.name}</p>}
+              {imgFile && (
+                <div className="flex items-center space-x-3">
+                  <p className=" text-slate-300">{imgFile.name}</p>
+                  {isImgUploading && <CircularProgress size={"25px"} />}
+                </div>
+              )}
             </div>
 
             <InputField
@@ -162,6 +204,7 @@ const TeamAddSection = ({
                 <PlayerCard
                   key={index}
                   name={player.name}
+                  imgURL={player.img}
                   position={player.position}
                   removePlayer={removePlayer}
                 />

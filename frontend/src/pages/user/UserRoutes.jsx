@@ -5,6 +5,9 @@ import Login from "./Login";
 import UserLayout from "./UserLayout";
 import AllEvents from "./AllEvents";
 import Alerts from "./Alerts";
+import TransactionsPage from "./TransactionsPage";
+import FAQsPage from "./FAQsPage";
+import TermsConditions from "./TermsConditions";
 
 function UserRoutes() {
   return (
@@ -15,8 +18,11 @@ function UserRoutes() {
       <Route element={<UserLayout />}>
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/dashboard/all-events" element={<AllEvents />} />
-        <Route path="/event" element={<EventPage />} />
+        <Route path="/event/:eventId" element={<EventPage />} />
         <Route path="/alerts" element={<Alerts />} />
+        <Route path="/transactions" element={<TransactionsPage />} />
+        <Route path="/faq" element={<FAQsPage />} />
+        <Route path="/terms-conditions" element={<TermsConditions />} />
       </Route>
     </Routes>
   );

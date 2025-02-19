@@ -2,10 +2,12 @@ import NotificationsOutlinedIcon from "@mui/icons-material/NotificationsOutlined
 import WalletOutlinedIcon from "@mui/icons-material/WalletOutlined";
 import QRImage from "../assets/QR.svg";
 import coinIcon from "../assets/coin.svg";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { Modal } from "@mui/material";
 import userApi from "../apis/userApi";
+import MenuIcon from "@mui/icons-material/Menu";
+import CloseIcon from "@mui/icons-material/Close";
 
 const Header = ({ isAuthenticated, userInfo }) => {
   const [isCoinsPaySelected, setIsCoinsPaySelected] = useState(false);
@@ -13,6 +15,8 @@ const Header = ({ isAuthenticated, userInfo }) => {
   const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
 
   const location = useLocation();
+
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   const logout = async () => {
     try {
@@ -50,7 +54,42 @@ const Header = ({ isAuthenticated, userInfo }) => {
         </div>
       </Modal>
 
-      <div>
+      {/* collapsable Sidebar */}
+      <div
+        className={`w-[350px] h-screen absolute top-0 left-0 bg-neutral-800 ${
+          isSidebarOpen ? "translate-x-0" : "-translate-x-full"
+        } transition-transform px-3 py-3 duration-500 z-30`}
+      >
+        <div className="w-full flex justify-end">
+          <div
+            onClick={() => setIsSidebarOpen(false)}
+            className="text-3xl text-slate-300 cursor-pointer"
+          >
+            <CloseIcon color="inherit" fontSize="inherit" />
+          </div>
+        </div>
+
+        <div className="mt-7 space-y-6">
+          {["Transactions", "FAQs", "Contact", "Terms & Conditons"].map(
+            (label, index) => (
+              <div
+                key={index}
+                className="text-center w-full py-2 hover:bg-neutral-900 rounded-lg cursor-pointer"
+              >
+                <p className="text-white text-2xl">{label}</p>
+              </div>
+            )
+          )}
+        </div>
+      </div>
+
+      <div className="flex items-center space-x-3 text-white text-3xl">
+        <MenuIcon
+          onClick={() => setIsSidebarOpen(true)}
+          color="inherit"
+          fontSize="inherit"
+          className="cursor-pointer"
+        />
         <h1
           onClick={() => navigate("/")}
           className="text-white text-3xl cursor-pointer"
