@@ -1,13 +1,44 @@
-import { useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import demoQR from "../../assets/QR.svg";
+import { useSnackbar } from "../../hooks/SnackBarContext";
+import adminApi from "../../apis/adminApi";
 
 const ChangeQR = () => {
   const inputRef = useRef(null);
+  const [qrFile, setQRFile] = useState(undefined);
+  const [qrURL, setQRURL] = useState("");
 
   const simulateUpload = () => {
     const inputElement = inputRef.current;
     inputElement.click();
   };
+
+  const { showSnackbar } = useSnackbar();
+
+  const uploadQR = async () => {
+    try {
+      const payload = new FormData();
+      payload.append("qr", qrFile);
+
+      //   For deleting the previously uploaded file
+      if (qrURL) payload.append("previousURL", qrURL);
+
+      const res = await adminApi.post("/change-qr", payload);
+
+      if (res.status == 200) {
+        setQRURL(res.data.qrURL);
+        showSnackbar("QR is uploaded successfully", "success");
+      }
+    } catch (e) {
+      showSnackbar("Error in uploading the QR", "error");
+    }
+  };
+
+  useEffect(() => {
+    if (!qrFile) return;
+
+    uploadQR();
+  }, [qrFile]);
 
   return (
     <div className="w-full h-full px-7 py-3">
@@ -22,7 +53,15 @@ const ChangeQR = () => {
               className="w-[300px] object-contain"
             />
           </div>
-          <input ref={inputRef} type="file" className="hidden" />
+          <input
+            ref={inputRef}
+            onChange={(e) => {
+              setQRFile(e.target.files[0]);
+            }}
+            type="file"
+            className="hidden"
+            accept="image/png"
+          />
           <button
             onClick={simulateUpload}
             className="bg-[#FEE715] px-7 py-1 text-lg font-medium mt-8 rounded-md w-fit"

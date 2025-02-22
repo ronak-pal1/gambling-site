@@ -8,6 +8,7 @@ import Alerts from "./Alerts";
 import TransactionsPage from "./TransactionsPage";
 import FAQsPage from "./FAQsPage";
 import TermsConditions from "./TermsConditions";
+import Homepage from "../Homepage";
 
 function UserRoutes() {
   return (
@@ -16,12 +17,14 @@ function UserRoutes() {
       <Route path="/*" element={<Navigate to={"/dashboard"} />} />
 
       <Route element={<UserLayout />}>
+        <Route index element={<Homepage />} />
+
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/dashboard/all-events" element={<AllEvents />} />
         <Route path="/event/:eventId" element={<EventPage />} />
         <Route path="/alerts" element={<Alerts />} />
         <Route path="/transactions" element={<TransactionsPage />} />
-        <Route path="/faq" element={<FAQsPage />} />
+        <Route path="/faqs" element={<FAQsPage />} />
         <Route path="/terms-conditions" element={<TermsConditions />} />
       </Route>
     </Routes>

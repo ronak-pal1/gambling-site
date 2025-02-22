@@ -1,11 +1,13 @@
 import { useEffect, useState } from "react";
 import adminApi from "../../apis/adminApi";
 import { useNavigate } from "react-router-dom";
+import { useSnackbar } from "../../hooks/SnackBarContext";
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
+  const { showSnackbar } = useSnackbar();
 
   const checkAuth = async () => {
     try {
@@ -31,7 +33,9 @@ const Login = () => {
       if (res.status == 200) {
         navigate("/admin/");
       }
-    } catch (e) {}
+    } catch (e) {
+      showSnackbar(e.response.data.message, "error");
+    }
   };
 
   return (

@@ -6,6 +6,7 @@ import PersonSharpIcon from "@mui/icons-material/PersonSharp";
 import coinSVG from "../../assets/coin.svg";
 import { useSnackbar } from "../../hooks/SnackBarContext";
 import adminApi from "../../apis/adminApi";
+import { formatDate } from "../../utils/formatDate";
 
 const a11yProps = (index) => {
   return {
@@ -124,7 +125,14 @@ const AddUsers = () => {
   );
 };
 
-const UserCard = ({ id, name, email, balance, setIsTransactionsModalOpen }) => {
+const UserCard = ({
+  id,
+  name,
+  email,
+  balance,
+  setIsTransactionsModalOpen,
+  setTransactionUserId,
+}) => {
   return (
     <div className="flex items-center justify-between border-b border-slate-800 pb-3">
       <div className="flex items-center space-x-4">
@@ -146,6 +154,7 @@ const UserCard = ({ id, name, email, balance, setIsTransactionsModalOpen }) => {
         <div
           onClick={() => {
             setIsTransactionsModalOpen(true);
+            setTransactionUserId(id);
           }}
           className="bg-slate-100 rounded-full px-3 py-2 cursor-pointer active:scale-95 transition-transform"
         >
@@ -165,6 +174,10 @@ const AllUsers = () => {
 
   const [isTransactionsModalOpen, setIsTransactionsModalOpen] = useState(false);
 
+  const [transactionUserId, setTransactionUserId] = useState("");
+  const [transactionsCoinBuy, setTransactionsCoinBuy] = useState([]);
+  const [transactionsBet, setTransactionsBet] = useState([]);
+
   const fetchUsers = async () => {
     setIsLoading(true);
     try {
@@ -179,6 +192,27 @@ const AllUsers = () => {
 
     setIsLoading(false);
   };
+
+  const fetchTransactions = async () => {
+    if (!transactionUserId) return;
+
+    try {
+      const res = await adminApi.get(`/transactions?id=${transactionUserId}`);
+
+      if (res.status == 200) {
+        const transac = res.data.transactions;
+
+        setTransactionsCoinBuy(transac.filter((t) => t.type == "coinbuy"));
+        setTransactionsBet(transac.filter((t) => t.type == "bet"));
+      }
+    } catch (e) {
+      showSnackbar("Error in fetching the transactions", "error");
+    }
+  };
+
+  useEffect(() => {
+    fetchTransactions();
+  }, [transactionUserId]);
 
   useEffect(() => {
     fetchUsers();
@@ -209,31 +243,40 @@ const AllUsers = () => {
                     <tr>
                       <th>Date</th>
                       <th>Event</th>
+                      <th>Bid</th>
                       <th>Amount</th>
                       <th>Status</th>
                     </tr>
                   </thead>
 
                   <tbody className="[&>tr>td]:py-2 [&>tr>td]:border [&>tr>td]:border-slate-400 [&>tr>td]:text-center">
-                    {[1, 2, 3, 4, 5, 6, 7, 8, 9].map((num) => (
-                      <tr key={num}>
-                        <td>03/03/2004</td>
-                        <td>Cricket</td>
-                        <td>
-                          <div className="flex items-centerm w-full justify-center space-x-3">
-                            <img
-                              src={coinSVG}
-                              alt="coins"
-                              className="w-5 object-contain"
-                            />
-                            <p>200</p>
-                          </div>
-                        </td>
-                        <td>Matched</td>
-                      </tr>
-                    ))}
+                    {transactionsBet.length != 0 &&
+                      transactionsBet.map((t) => (
+                        <tr key={t._id}>
+                          <td>{formatDate(t.createdAt)}</td>
+                          <td>Cricket</td>
+                          <td className="text-blue-600">{t.odds}x</td>
+                          <td>
+                            <div className="flex items-centerm w-full justify-center space-x-3">
+                              <img
+                                src={coinSVG}
+                                alt="coins"
+                                className="w-5 object-contain"
+                              />
+                              <p>{t.amount}</p>
+                            </div>
+                          </td>
+                          <td>{t.status}</td>
+                        </tr>
+                      ))}
                   </tbody>
                 </table>
+
+                {transactionsBet.length == 0 && (
+                  <div className="w-full text-center mt-4">
+                    <p className="text-slate-500 text-sm">No bets done</p>
+                  </div>
+                )}
               </div>
 
               <div>
@@ -249,21 +292,30 @@ const AllUsers = () => {
                   </thead>
 
                   <tbody className="[&>tr>td]:py-2 [&>tr>td]:border [&>tr>td]:border-slate-400 [&>tr>td]:text-center">
-                    <tr>
-                      <td>03/03/2004</td>
-                      <td>
-                        <div className="flex items-centerm w-full justify-center space-x-3">
-                          <img
-                            src={coinSVG}
-                            alt="coins"
-                            className="w-5 object-contain"
-                          />
-                          <p>200</p>
-                        </div>
-                      </td>
-                    </tr>
+                    {transactionsCoinBuy.length != 0 &&
+                      transactionsCoinBuy.map((t) => (
+                        <tr key={t._id}>
+                          <td>{formatDate(t.createdAt)}</td>
+                          <td>
+                            <div className="flex items-centerm w-full justify-center space-x-3">
+                              <img
+                                src={coinSVG}
+                                alt="coins"
+                                className="w-5 object-contain"
+                              />
+                              <p>{t.amount}</p>
+                            </div>
+                          </td>
+                        </tr>
+                      ))}
                   </tbody>
                 </table>
+
+                {transactionsCoinBuy.length == 0 && (
+                  <div className="w-full mt-4 text-center">
+                    <p>No coin purchase history</p>
+                  </div>
+                )}
               </div>
             </div>
           </div>
@@ -299,6 +351,7 @@ const AllUsers = () => {
               email={user.email}
               balance={user.coinBalance}
               setIsTransactionsModalOpen={setIsTransactionsModalOpen}
+              setTransactionUserId={setTransactionUserId}
             />
           ))
         )}

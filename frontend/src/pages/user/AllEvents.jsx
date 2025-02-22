@@ -24,8 +24,10 @@ const AllEvents = () => {
   }, []);
 
   return (
-    <div className="w-full h-full px-10 py-7 overflow-y-auto  pb-24 custom-scrollbar space-y-14">
-      <h1 className="text-white text-2xl mb-7 font-medium">All Events</h1>
+    <div className="w-full h-full md:px-10 md:py-7 p-4 overflow-y-auto  pb-24 custom-scrollbar space-y-14">
+      <h1 className="text-white text-lg md:text-2xl mb-4 md:mb-7 font-medium">
+        All Events
+      </h1>
 
       <div className="flex flex-wrap gap-6">
         {events.map((event) => (
@@ -41,6 +43,17 @@ const AllEvents = () => {
             team2Name={event.team2Name}
           />
         ))}
+
+        {/* <EventCard
+          sportName={"test"}
+          date={"taga"}
+          startTime={"agag"}
+          endTime={"agag"}
+          eventId={"agag"}
+          prizePool={"agag"}
+          team1Name={"agag"}
+          team2Name={"agag"}
+        /> */}
       </div>
     </div>
   );

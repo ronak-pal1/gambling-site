@@ -1,12 +1,14 @@
 import { useEffect, useState } from "react";
 import userApi from "../../apis/userApi";
 import { useNavigate } from "react-router-dom";
+import { useSnackbar } from "../../hooks/SnackBarContext";
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
   const navigate = useNavigate();
+  const { showSnackbar } = useSnackbar();
 
   const getUser = async () => {
     try {
@@ -32,7 +34,9 @@ const Login = () => {
       if (res.status == 200) {
         navigate("/dashboard");
       }
-    } catch (e) {}
+    } catch (e) {
+      showSnackbar(e.response.data.message, "error");
+    }
   };
 
   useEffect(() => {
@@ -41,7 +45,7 @@ const Login = () => {
 
   return (
     <div className="w-full h-screen flex items-center justify-center">
-      <div className="w-1/3 text-center space-y-7">
+      <div className="w-[80%] md:w-1/3 text-center space-y-7">
         <h1 className="text-white text-3xl">Login</h1>
 
         <div className="flex flex-col items-center w-full space-y-5">

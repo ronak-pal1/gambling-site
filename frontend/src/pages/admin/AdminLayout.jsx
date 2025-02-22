@@ -85,7 +85,7 @@ const AdminLayout = () => {
                 onClick={() => navigate("/")}
                 className="text-white text-3xl cursor-pointer"
               >
-                Gambling
+                Khelo Sphardha
               </h1>
             </div>
 

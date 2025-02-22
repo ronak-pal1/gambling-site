@@ -15,3 +15,16 @@ export const convertTo12Hour = (time24) => {
   const formattedTime = `${hours12}:${minutes} ${period}`;
   return formattedTime;
 };
+
+export const addMinutesToCurrentTime = (duration) => {
+  // Extract the numeric value from the string (e.g., "2m" -> 2)
+  const minutes = parseInt(duration);
+
+  // Get the current time
+  const currentTime = new Date();
+
+  // Add minutes
+  currentTime.setMinutes(currentTime.getMinutes() + minutes);
+
+  return currentTime;
+};
