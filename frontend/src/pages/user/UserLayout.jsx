@@ -17,7 +17,7 @@ const UserLayout = () => {
         setIsAuthenticated(true);
         setUserInfo(res.data.user);
       } else {
-        if (location.pathname != "/") navigate("/login");
+        navigate("/login");
       }
     } catch (e) {
       navigate("/login");

@@ -152,7 +152,7 @@ const Header = ({ isAuthenticated, userInfo }) => {
           onClick={() => navigate("/")}
           className="text-white text-xl md:text-3xl cursor-pointer"
         >
-          Khelo Sphardha
+          Khelo Spardha
         </h1>
       </div>
 

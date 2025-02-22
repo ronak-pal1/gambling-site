@@ -42,7 +42,7 @@ const Dashboard = () => {
 
         <div className="flex flex-wrap gap-6">
           {ongoingEvents.length != 0 ? (
-            ongoingEvents.map((event) => (
+            ongoingEvents?.map((event) => (
               <EventCard
                 key={event._id}
                 sportName={event.sportName}

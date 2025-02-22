@@ -208,7 +208,7 @@ const LiveAlerts = () => {
               </p>
             </div>
           ) : (
-            alerts.map((alert) => (
+            alerts?.map((alert) => (
               <AlertCard
                 key={alert._id}
                 sportName={alert.sportName}

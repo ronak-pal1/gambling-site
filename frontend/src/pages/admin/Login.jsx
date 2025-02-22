@@ -2,11 +2,13 @@ import { useEffect, useState } from "react";
 import adminApi from "../../apis/adminApi";
 import { useNavigate } from "react-router-dom";
 import { useSnackbar } from "../../hooks/SnackBarContext";
+import { CircularProgress } from "@mui/material";
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
+  const [isLoading, setIsLoading] = useState(false);
   const { showSnackbar } = useSnackbar();
 
   const checkAuth = async () => {
@@ -24,6 +26,9 @@ const Login = () => {
   }, []);
 
   const login = async () => {
+    if (isLoading) return;
+
+    setIsLoading(true);
     try {
       const res = await adminApi.post("/login", {
         email,
@@ -36,6 +41,8 @@ const Login = () => {
     } catch (e) {
       showSnackbar(e.response.data.message, "error");
     }
+
+    setIsLoading(false);
   };
 
   return (
@@ -62,9 +69,9 @@ const Login = () => {
           />
           <button
             onClick={login}
-            className="bg-[#FEE715] px-7 py-1 text-lg font-medium mt-8 rounded-md w-fit active:scale-95 transition-transform"
+            className="bg-[#FEE715] px-7 py-1 text-lg font-medium mt-8 rounded-md w-fit active:scale-95 transition-transform flex items-center justify-center"
           >
-            Login
+            {isLoading ? <CircularProgress size={"15px"} /> : "Login"}
           </button>
         </div>
       </div>

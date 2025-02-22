@@ -10,7 +10,6 @@ export const getAlerts = asyncHandler(async (req: Request, res: Response) => {
       // Step 1: Filter alerts (Exclude user's alerts & expired alerts)
       {
         $match: {
-          by: { $ne: user._id },
           endTime: { $gt: new Date() }, // Only alerts with future endTime
         },
       },
