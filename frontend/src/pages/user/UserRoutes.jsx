@@ -10,7 +10,7 @@ import FAQsPage from "./FAQsPage";
 import TermsConditions from "./TermsConditions";
 import Homepage from "../Homepage";
 
-function UserRoutes() {
+const UserRoutes = () => {
   return (
     <Routes>
       <Route path="/login" element={<Login />} />
@@ -29,6 +29,6 @@ function UserRoutes() {
       </Route>
     </Routes>
   );
-}
+};
 
 export default UserRoutes;
