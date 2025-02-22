@@ -13,11 +13,11 @@ const UserLayout = () => {
     try {
       const res = await userApi.get("/get-user");
 
-      if (res.status != 200) {
-        if (location.pathname != "/") navigate("/login");
-      } else {
+      if (res.status == 200) {
         setIsAuthenticated(true);
         setUserInfo(res.data.user);
+      } else {
+        if (location.pathname != "/") navigate("/login");
       }
     } catch (e) {
       navigate("/login");
