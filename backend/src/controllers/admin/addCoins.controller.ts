@@ -1,6 +1,10 @@
 import { Request, Response } from "express";
 import asyncHandler from "../../utils/asyncHandler";
 import { UserModel } from "../../models/user.model";
+import {
+  TRANSAC_TYPE,
+  TransactionModel,
+} from "../../models/transactions.model";
 
 export const addCoins = asyncHandler(async (req: Request, res: Response) => {
   const amount = req.body.amount;
@@ -27,6 +31,14 @@ export const addCoins = asyncHandler(async (req: Request, res: Response) => {
         },
       }
     );
+
+    const newTransaction = new TransactionModel({
+      userId: user._id,
+      amount,
+      type: TRANSAC_TYPE.coinbuy,
+    });
+
+    await newTransaction.save();
 
     res
       .status(200)

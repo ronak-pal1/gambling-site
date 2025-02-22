@@ -6,6 +6,7 @@ import { AUTH_ROLES } from "../utils/roles";
 export interface IAdmin extends Document {
   email: string;
   password: string;
+  qrURL: string;
   refreshToken: string;
   isPasswordCorrect(password: string): Promise<boolean>;
   generateAccessToken(): string;
@@ -21,6 +22,10 @@ const AdminSchema: Schema<IAdmin> = new Schema<IAdmin>({
   password: {
     type: String,
     required: true,
+    trim: true,
+  },
+  qrURL: {
+    type: String,
     trim: true,
   },
   refreshToken: {

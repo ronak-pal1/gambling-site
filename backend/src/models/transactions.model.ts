@@ -1,29 +1,46 @@
 import { Model, Schema, model } from "mongoose";
+import { IUser } from "./user.model";
+import { IEvent } from "./event.model";
+
+export enum TRANSAC_TYPE {
+  "coinbuy" = "coinbuy",
+  "bet" = "bet",
+}
 
 export interface ITransaction extends Document {
-  from: Schema.Types.ObjectId;
-  to: Schema.Types.ObjectId;
-  eventId: Schema.Types.ObjectId;
+  userId: Schema.Types.ObjectId | IUser;
+  eventId: Schema.Types.ObjectId | IEvent;
   amount: number;
+  odds: number;
+  type: TRANSAC_TYPE;
+  status: string;
 }
 
 const TransactionSchema: Schema<ITransaction> = new Schema<ITransaction>(
   {
-    from: {
+    userId: {
       type: Schema.Types.ObjectId,
       required: true,
-    },
-    to: {
-      type: Schema.Types.ObjectId,
-      required: true,
+      ref: "user",
     },
     eventId: {
       type: Schema.Types.ObjectId,
-      required: true,
+      ref: "event",
     },
     amount: {
       type: Number,
-      required: true,
+    },
+    type: {
+      type: String,
+      enum: Object.values(TRANSAC_TYPE),
+      default: TRANSAC_TYPE.coinbuy,
+    },
+    odds: {
+      type: Number,
+    },
+    status: {
+      type: String,
+      trim: true,
     },
   },
   {

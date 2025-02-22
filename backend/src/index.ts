@@ -9,6 +9,7 @@ import errorHandlerMiddleware from "./middlewares/errorHandler";
 import notFoundMiddleware from "./middlewares/notFound";
 import cookieParser from "cookie-parser";
 import helmet from "helmet";
+import checkExpiredAlerts from "./utils/refund.util";
 
 dotenv.config();
 
@@ -39,6 +40,8 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 app.use("/api/v1", v1Routes);
+
+checkExpiredAlerts();
 
 if (process.env.NODE_ENV === "production") {
   const buildPath = path.join(__dirname, "..", "..", "client", "dist");

@@ -4,6 +4,10 @@ export interface IAlert extends Document {
   by: Schema.Types.ObjectId;
   eventId: Schema.Types.ObjectId;
   amount: number;
+  endTime: Date;
+  odds: number;
+  team: string;
+  status: string;
 }
 
 const AlertSchema: Schema<IAlert> = new Schema<IAlert>(
@@ -18,6 +22,22 @@ const AlertSchema: Schema<IAlert> = new Schema<IAlert>(
     },
     amount: {
       type: Number,
+      required: true,
+    },
+    endTime: {
+      type: Date,
+      required: true,
+    },
+    odds: {
+      type: Number,
+      required: true,
+    },
+    team: {
+      type: String,
+      required: true,
+    },
+    status: {
+      type: String,
       required: true,
     },
   },
