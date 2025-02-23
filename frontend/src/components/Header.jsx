@@ -1,6 +1,6 @@
 import NotificationsOutlinedIcon from "@mui/icons-material/NotificationsOutlined";
 import WalletOutlinedIcon from "@mui/icons-material/WalletOutlined";
-import QRImage from "../assets/QR.svg";
+import QRImage from "../assets/qr.jpeg";
 import coinIcon from "../assets/coin.svg";
 import { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
