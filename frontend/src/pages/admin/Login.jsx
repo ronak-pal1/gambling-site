@@ -3,6 +3,8 @@ import adminApi from "../../apis/adminApi";
 import { useNavigate } from "react-router-dom";
 import { useSnackbar } from "../../hooks/SnackBarContext";
 import { CircularProgress } from "@mui/material";
+import VisibilitySharpIcon from "@mui/icons-material/VisibilitySharp";
+import VisibilityOffSharpIcon from "@mui/icons-material/VisibilityOffSharp";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -10,6 +12,7 @@ const Login = () => {
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
   const { showSnackbar } = useSnackbar();
+  const [isPassVisible, setIsPassVisible] = useState(false);
 
   const checkAuth = async () => {
     try {
@@ -55,18 +58,35 @@ const Login = () => {
             type="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            className="px-3 py-2 bg-transparent rounded-md border border-slate-500 w-full text-white"
+            className="px-3 py-2 bg-transparent rounded-md border border-slate-500 w-full text-white outline-none"
             placeholder="Email"
             required
           />
-          <input
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            className="px-3 py-2 bg-transparent rounded-md border border-slate-500 w-full text-white"
-            placeholder="Password"
-            required
-          />
+
+          <div className="px-3 py-2 flex items-center rounded-md border border-slate-500 w-full">
+            <input
+              type={isPassVisible ? "text" : "password"}
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              className=" bg-transparent w-full  text-white outline-none"
+              placeholder="Password"
+              required
+            />
+
+            {password && (
+              <div
+                className="text-white"
+                onClick={() => setIsPassVisible((current) => !current)}
+              >
+                {isPassVisible ? (
+                  <VisibilityOffSharpIcon size={"13px"} color="inherit" />
+                ) : (
+                  <VisibilitySharpIcon size={"13px"} color="inherit" />
+                )}
+              </div>
+            )}
+          </div>
+
           <button
             onClick={login}
             className="bg-[#FEE715] px-7 py-1 text-lg font-medium mt-8 rounded-md w-fit active:scale-95 transition-transform flex items-center justify-center"

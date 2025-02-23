@@ -130,7 +130,7 @@ const AdminLayout = () => {
             ))}
           </div>
 
-          <div className="flex-[0.8] h-full">
+          <div className="flex-[0.8] h-full overflow-y-scroll">
             <Outlet />
           </div>
         </div>

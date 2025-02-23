@@ -7,6 +7,10 @@ import coinSVG from "../../assets/coin.svg";
 import { useSnackbar } from "../../hooks/SnackBarContext";
 import adminApi from "../../apis/adminApi";
 import { formatDate } from "../../utils/formatDate";
+import VisibilitySharpIcon from "@mui/icons-material/VisibilitySharp";
+import VisibilityOffSharpIcon from "@mui/icons-material/VisibilityOffSharp";
+import * as XLSX from "xlsx";
+import { saveAs } from "file-saver";
 
 const a11yProps = (index) => {
   return {
@@ -21,6 +25,7 @@ const AddUsers = () => {
   const [password, setPassword] = useState("");
   const { showSnackbar } = useSnackbar();
   const [isLoading, setIsLoading] = useState(false);
+  const [isPassVisible, setIsPassVisible] = useState(false);
 
   const generatePass = () => {
     const chars =
@@ -96,13 +101,34 @@ const AddUsers = () => {
         />
 
         <div className="flex flex-col space-y-3">
-          <InputField
-            label={"Passoword"}
-            type={"password"}
-            value={password}
-            setValue={setPassword}
-            placeholder={"Enter a password"}
-          />
+          <div className="flex flex-col space-y-3">
+            <label className="text-white text-xl">Password</label>
+
+            <div className="px-3 py-2 flex items-center w-full rounded-md border border-slate-500">
+              <input
+                type={isPassVisible ? "text" : "password"}
+                value={password}
+                onChange={(e) => {
+                  setPassword(e.target.value);
+                }}
+                placeholder={"Enter a password"}
+                className=" bg-transparent  w-full text-white outline-none"
+              />
+
+              {password && (
+                <div
+                  className="text-white"
+                  onClick={() => setIsPassVisible((current) => !current)}
+                >
+                  {isPassVisible ? (
+                    <VisibilityOffSharpIcon size={"13px"} color="inherit" />
+                  ) : (
+                    <VisibilitySharpIcon size={"13px"} color="inherit" />
+                  )}
+                </div>
+              )}
+            </div>
+          </div>
 
           <button
             onClick={() => generatePass()}
@@ -130,11 +156,102 @@ const UserCard = ({
   name,
   email,
   balance,
+  isBlocked,
   setIsTransactionsModalOpen,
   setTransactionUserId,
 }) => {
+  const [isRemoveModalOpen, setIsRemoveModalOpen] = useState(false);
+  const [isBlockModalOpen, setIsBlockModalOpen] = useState(false);
+  const { showSnackbar } = useSnackbar();
+
+  const userBlockState = async (state) => {
+    try {
+      const res = await adminApi.post("/set-user-block-state", {
+        userId: id,
+        state,
+      });
+
+      if (res.status == 200) {
+        showSnackbar("Blocked successfully", "success");
+        setIsBlockModalOpen(false);
+      }
+    } catch (e) {
+      showSnackbar("Error in blocking the user", "error");
+    }
+  };
+
+  const removeUser = async () => {
+    try {
+      const res = await adminApi.post("/remove-user", {
+        userId: id,
+      });
+
+      if (res.status == 200) {
+        showSnackbar("Removed successfully", "success");
+        setIsRemoveModalOpen(false);
+      }
+    } catch (e) {
+      showSnackbar("Error in removing the user", "error");
+    }
+  };
+
   return (
-    <div className="flex items-center justify-between border-b border-slate-800 pb-3">
+    <div className=" flex items-center justify-between border-b border-slate-800  pb-3">
+      <Modal open={isRemoveModalOpen}>
+        <div
+          className="w-full h-full flex items-center justify-center"
+          onClick={() => {
+            setIsRemoveModalOpen(false);
+          }}
+        >
+          <div
+            className="bg-slate-100 w-fit h-fit rounded-md px-20 py-12 overflow-hidden"
+            onClick={(e) => {
+              e.stopPropagation();
+            }}
+          >
+            <div className="flex flex-col items-center space-y-5">
+              <h1 className="text-4xl font-medium">Want to remove ?</h1>
+              <button
+                onClick={removeUser}
+                className="text-white bg-red-700 px-4 py-2 rounded-full"
+              >
+                Confirm remove
+              </button>
+            </div>
+          </div>
+        </div>
+      </Modal>
+
+      <Modal open={isBlockModalOpen}>
+        <div
+          className="w-full h-full flex items-center justify-center"
+          onClick={() => {
+            setIsBlockModalOpen(false);
+          }}
+        >
+          <div
+            className="bg-slate-100 w-fit h-fit rounded-md px-24 py-12 overflow-hidden"
+            onClick={(e) => {
+              e.stopPropagation();
+            }}
+          >
+            <div className="flex flex-col items-center space-y-5">
+              <h1 className="text-4xl font-medium">Want to block ?</h1>
+              <button
+                onClick={() => {
+                  if (isBlocked) userBlockState(false);
+                  else userBlockState(true);
+                }}
+                className="text-white bg-red-700 px-4 py-2 rounded-full"
+              >
+                Confirm {isBlocked ? "unblock" : "block"}
+              </button>
+            </div>
+          </div>
+        </div>
+      </Modal>
+
       <div className="flex items-center space-x-4">
         <div className="text-white text-4xl">
           <PersonSharpIcon color="inherit" fontSize="inherit" />
@@ -147,6 +264,23 @@ const UserCard = ({
       </div>
 
       <div className="flex items-center space-x-10">
+        {isBlocked && (
+          <p className="text-sm text-red-600 font-medium">Blocked</p>
+        )}
+        <div
+          onClick={() => setIsRemoveModalOpen(true)}
+          className="cursor-pointer w-fit px-5 py-2 text-xs text-white bg-transparent rounded-full border border-slate-200"
+        >
+          Remove
+        </div>
+
+        <div
+          onClick={() => setIsBlockModalOpen(true)}
+          className="cursor-pointer w-fit px-5 py-2 text-xs text-white bg-red-700 rounded-full"
+        >
+          {isBlocked ? "Unblock" : "Block"}
+        </div>
+
         <div className="flex items-center space-x-3 text-white">
           <img width={20} height={20} src={coinSVG} alt="coin svg icon" />
           <p>{balance}</p>
@@ -210,6 +344,62 @@ const AllUsers = () => {
     }
   };
 
+  const exportUsersToExcel = (fileName = "users.xlsx") => {
+    if (users.length == 0) {
+      showSnackbar("No users to download", "warning");
+      return;
+    }
+
+    // Step 1: Convert JSON to Worksheet
+    const worksheet1 = XLSX.utils.json_to_sheet(users);
+
+    // Step 2: Create a Workbook and Append the Worksheet
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet1, "Users");
+
+    // Step 3: Convert Workbook to Blob
+    const excelBuffer = XLSX.write(workbook, {
+      bookType: "xlsx",
+      type: "array",
+    });
+
+    const blob = new Blob([excelBuffer], {
+      type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8",
+    });
+
+    // Step 4: Save File to User’s Computer
+    saveAs(blob, fileName);
+  };
+
+  const exportTransactionsToExcel = (fileName = "transactions.xlsx") => {
+    if (transactionsBet.length == 0 && transactionsCoinBuy.length == 0) {
+      showSnackbar("No transactions to download", "warning");
+      return;
+    }
+
+    // Step 1: Convert JSON to Worksheet
+    const worksheet1 = XLSX.utils.json_to_sheet(transactionsBet);
+    const worksheet2 = XLSX.utils.json_to_sheet(transactionsCoinBuy);
+
+    // Step 2: Create a Workbook and Append the Worksheet
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet1, "Bets");
+    XLSX.utils.book_append_sheet(workbook, worksheet2, "Coin Buys");
+
+    // Step 3: Convert Workbook to Blob
+    const excelBuffer = XLSX.write(workbook, {
+      bookType: "xlsx",
+      type: "array",
+    });
+
+    const blob = new Blob([excelBuffer], {
+      type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8",
+    });
+
+    // Step 4: Save File to User’s Computer
+    saveAs(blob, fileName);
+  };
+
   useEffect(() => {
     fetchTransactions();
   }, [transactionUserId]);
@@ -233,7 +423,17 @@ const AllUsers = () => {
               e.stopPropagation();
             }}
           >
-            <h1 className="text-2xl text-black font-semibold">Transactions</h1>
+            <div className="flex items-center justify-between">
+              <h1 className="text-2xl text-black font-semibold">
+                Transactions
+              </h1>
+              <button
+                onClick={() => exportTransactionsToExcel()}
+                className="bg-blue-500 text-white px-5 py-2 rounded-full hover:scale-95 transition-transform text-sm"
+              >
+                Download
+              </button>
+            </div>
 
             <div className="w-full h-full mt-5 pb-20 space-y-7 overflow-y-scroll custom-scrollbar-light">
               <div>
@@ -322,6 +522,15 @@ const AllUsers = () => {
         </div>
       </Modal>
 
+      <div className="w-full flex justify-end py-4">
+        <button
+          onClick={() => exportUsersToExcel()}
+          className="bg-blue-500 text-white px-5 py-2 rounded-full hover:scale-95 transition-transform text-sm w-fit"
+        >
+          Download
+        </button>
+      </div>
+
       <div className="flex items-center">
         <div className="flex items-center border border-slate-500 w-full px-3  rounded-full">
           <SearchIcon color="inherit" className="text-white" />
@@ -337,7 +546,7 @@ const AllUsers = () => {
         </button>
       </div>
 
-      <div className="flex flex-col space-y-7 my-10">
+      <div className="flex flex-col space-y-7 my-10 pb-60">
         {isLoading ? (
           <div className="w-full flex justify-center">
             <CircularProgress size={"25px"} />
@@ -350,6 +559,7 @@ const AllUsers = () => {
               name={user.name}
               email={user.email}
               balance={user.coinBalance}
+              isBlocked={user.isBlocked}
               setIsTransactionsModalOpen={setIsTransactionsModalOpen}
               setTransactionUserId={setTransactionUserId}
             />

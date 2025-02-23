@@ -95,11 +95,11 @@ const TeamCard = ({ teamPosition, teamName, players, score, odds }) => {
                     className="mr-2"
                     onChange={(e) => {
                       if (e.target.checked)
-                        setTotalAmount((amount) => amount + 500);
-                      else setTotalAmount((amount) => amount - 500);
+                        setTotalAmount((amount) => amount + 250);
+                      else setTotalAmount((amount) => amount - 250);
                     }}
                   />
-                  <label>500/-</label>
+                  <label>250/-</label>
                 </div>
                 <div>
                   <input
@@ -107,11 +107,11 @@ const TeamCard = ({ teamPosition, teamName, players, score, odds }) => {
                     className="mr-2"
                     onChange={(e) => {
                       if (e.target.checked)
-                        setTotalAmount((amount) => amount + 1000);
-                      else setTotalAmount((amount) => amount - 1000);
+                        setTotalAmount((amount) => amount + 500);
+                      else setTotalAmount((amount) => amount - 500);
                     }}
                   />
-                  <label>1000/-</label>
+                  <label>500/-</label>
                 </div>
                 <div>
                   <input

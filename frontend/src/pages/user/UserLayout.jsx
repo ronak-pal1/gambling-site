@@ -34,7 +34,7 @@ const UserLayout = () => {
         <Header isAuthenticated={isAuthenticated} userInfo={userInfo} />
       </div>
 
-      <div className="flex-[0.9] h-full">
+      <div className="flex-[0.9] h-full overflow-y-scroll">
         <Outlet />
       </div>
     </div>

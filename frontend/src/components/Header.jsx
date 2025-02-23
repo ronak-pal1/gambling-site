@@ -163,9 +163,7 @@ const Header = ({ isAuthenticated, userInfo }) => {
               className="text-white text-3xl relative cursor-pointer"
               onClick={() => navigate("/alerts")}
             >
-              <div className="absolute -top-1 -left-1 bg-red-500 px-2 py-1 text-sm rounded-full">
-                <p>5</p>
-              </div>
+              <div className="absolute -top-0 left-0 bg-red-500 px-2 py-2 text-sm rounded-full"></div>
               <NotificationsOutlinedIcon fontSize="inherit" />
             </div>
 

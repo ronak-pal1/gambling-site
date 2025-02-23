@@ -12,8 +12,8 @@ const ModifyEventModalContent = ({ content }) => {
   const [endTime, setEndTime] = useState("");
   const [team1Name, setTeam1Name] = useState("");
   const [team2Name, setTeam2Name] = useState("");
-  const [team1Score, setTeam1Score] = useState(0);
-  const [team2Score, setTeam2Score] = useState(0);
+  const [team1Score, setTeam1Score] = useState("");
+  const [team2Score, setTeam2Score] = useState("");
   const [team1Odd, setTeam1Odd] = useState(0);
   const [team2Odd, setTeam2Odd] = useState(0);
 
@@ -192,11 +192,10 @@ const ModifyEventModalContent = ({ content }) => {
                   Score
                 </label>
                 <input
-                  type="number"
+                  type="text"
                   value={team1Score}
-                  onChange={(e) => setTeam1Score(parseInt(e.target.value))}
+                  onChange={(e) => setTeam1Score(e.target.value)}
                   className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 p-2 border"
-                  min="0"
                 />
               </div>
               <div>
@@ -235,11 +234,10 @@ const ModifyEventModalContent = ({ content }) => {
                   Score
                 </label>
                 <input
-                  type="number"
+                  type="text"
                   value={team2Score}
                   onChange={(e) => setTeam2Score(e.target.value)}
                   className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 p-2 border"
-                  min="0"
                 />
               </div>
               <div>

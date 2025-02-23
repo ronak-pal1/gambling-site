@@ -28,7 +28,7 @@ const TransactionsPage = () => {
 
   return (
     <div className="w-full h-full flex items-center justify-center">
-      <div className=" w-full h-full rounded-md md:p-8 p-4">
+      <div className=" w-full h-full rounded-md md:p-8 p-4 ">
         <h1 className="text-lg md:text-2xl text-white font-semibold">
           Transactions
         </h1>
