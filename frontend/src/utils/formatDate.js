@@ -4,7 +4,7 @@ export const formatDate = (dateString) => {
   const day = String(date.getDate()).padStart(2, "0");
   const year = date.getFullYear();
 
-  return `${month}/${day}/${year}`;
+  return `${day}/${month}/${year}`;
 };
 
 export const formateDateReverse = (dateString) => {

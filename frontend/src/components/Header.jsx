@@ -1,8 +1,7 @@
 import NotificationsOutlinedIcon from "@mui/icons-material/NotificationsOutlined";
 import WalletOutlinedIcon from "@mui/icons-material/WalletOutlined";
-import QRImage from "../assets/qr.jpeg";
 import coinIcon from "../assets/coin.svg";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { Modal } from "@mui/material";
 import userApi from "../apis/userApi";
@@ -33,6 +32,8 @@ const Header = ({ isAuthenticated, userInfo }) => {
 
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
+  const [qrURL, setqrURL] = useState("");
+
   const logout = async () => {
     try {
       const res = await userApi.post("/logout");
@@ -43,6 +44,18 @@ const Header = ({ isAuthenticated, userInfo }) => {
       }
     } catch (e) {}
   };
+
+  const fetchQR = async () => {
+    try {
+      const res = await userApi.get("/get-qr");
+
+      if (res.status == 200) setqrURL(res.data.qrURL);
+    } catch (e) {}
+  };
+
+  useEffect(() => {
+    fetchQR();
+  }, []);
 
   return (
     <header className="flex items-center justify-between px-4 md:px-7 py-5">
@@ -100,11 +113,14 @@ const Header = ({ isAuthenticated, userInfo }) => {
                     <p className=" font-medium ">{userInfo.balance} </p>
                     <img src={coinIcon} alt="coin icon" className="w-4 h-4" />
                   </div>
-                  <img
-                    src={QRImage}
-                    alt="QR code"
-                    className="w-52 object-contain"
-                  />
+
+                  <div className="w-52 h-52">
+                    <img
+                      src={qrURL}
+                      alt="QR code"
+                      className="w-52 object-contain"
+                    />
+                  </div>
 
                   <p className="text-sm">Pay using the QR to get your coins</p>
                 </div>
@@ -186,11 +202,13 @@ const Header = ({ isAuthenticated, userInfo }) => {
                     <p className=" font-medium ">{userInfo.balance} </p>
                     <img src={coinIcon} alt="coin icon" className="w-4 h-4" />
                   </div>
-                  <img
-                    src={QRImage}
-                    alt="QR code"
-                    className="w-52 object-contain"
-                  />
+                  <div className="w-52 h-52">
+                    <img
+                      src={qrURL}
+                      alt="QR code"
+                      className="w-52 object-contain"
+                    />
+                  </div>
 
                   <p className="text-sm">Pay using the QR to get your coins</p>
                 </div>

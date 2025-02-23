@@ -11,6 +11,7 @@ import VisibilitySharpIcon from "@mui/icons-material/VisibilitySharp";
 import VisibilityOffSharpIcon from "@mui/icons-material/VisibilityOffSharp";
 import * as XLSX from "xlsx";
 import { saveAs } from "file-saver";
+import { filter } from "fuzzy";
 
 const a11yProps = (index) => {
   return {
@@ -299,6 +300,8 @@ const UserCard = ({
   );
 };
 
+let tempUsers = [];
+
 const AllUsers = () => {
   const { showSnackbar } = useSnackbar();
 
@@ -312,6 +315,8 @@ const AllUsers = () => {
   const [transactionsCoinBuy, setTransactionsCoinBuy] = useState([]);
   const [transactionsBet, setTransactionsBet] = useState([]);
 
+  const [searchQuery, setSearchQuery] = useState("");
+
   const fetchUsers = async () => {
     setIsLoading(true);
     try {
@@ -319,6 +324,7 @@ const AllUsers = () => {
 
       if (res.status == 200) {
         setUsers(res.data.users);
+        tempUsers = res.data.users;
       }
     } catch (e) {
       showSnackbar("Error in fetching users", "error");
@@ -343,6 +349,25 @@ const AllUsers = () => {
       showSnackbar("Error in fetching the transactions", "error");
     }
   };
+
+  const searchUser = (str) => {
+    if (str == "") {
+      setUsers(tempUsers);
+      return;
+    }
+    const names = tempUsers.map((user) => user.name);
+
+    const results = filter(str, names);
+
+    const final = results.map((r) => r.string);
+    const filteredUsers = tempUsers.filter((user) => final.includes(user.name));
+
+    setUsers(filteredUsers);
+  };
+
+  useEffect(() => {
+    searchUser(searchQuery);
+  }, [searchQuery]);
 
   const exportUsersToExcel = (fileName = "users.xlsx") => {
     if (users.length == 0) {
@@ -536,6 +561,8 @@ const AllUsers = () => {
           <SearchIcon color="inherit" className="text-white" />
           <input
             type="text"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
             className="px-3 py-2 bg-transparent w-full  text-white outline-none"
             placeholder="Search users using email"
           />

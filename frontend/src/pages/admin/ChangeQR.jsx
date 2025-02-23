@@ -1,5 +1,4 @@
 import { useEffect, useRef, useState } from "react";
-import demoQR from "../../assets/QR.svg";
 import { useSnackbar } from "../../hooks/SnackBarContext";
 import adminApi from "../../apis/adminApi";
 
@@ -34,6 +33,18 @@ const ChangeQR = () => {
     }
   };
 
+  const fetchQR = async () => {
+    try {
+      const res = await adminApi.get("/get-qr");
+
+      if (res.status == 200) setQRURL(res.data.qrURL);
+    } catch (e) {}
+  };
+
+  useEffect(() => {
+    fetchQR();
+  }, []);
+
   useEffect(() => {
     if (!qrFile) return;
 
@@ -46,11 +57,11 @@ const ChangeQR = () => {
 
       <div className=" h-full w-full flex justify-center items-center">
         <div className="w-fit h-fit flex flex-col items-center">
-          <div className="w-fit h-fit bg-white">
+          <div className="w-[300px] h-[300px] bg-white">
             <img
-              src={demoQR}
+              src={qrURL}
               alt="QR code"
-              className="w-[300px] object-contain"
+              className="w-[300px] h-[300px] object-contain"
             />
           </div>
           <input
@@ -60,7 +71,7 @@ const ChangeQR = () => {
             }}
             type="file"
             className="hidden"
-            accept="image/png"
+            accept="image/png, image/jpg, image/jpeg"
           />
           <button
             onClick={simulateUpload}
