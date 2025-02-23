@@ -16,6 +16,7 @@ import {
 } from "../../../controllers/user/bet.controller";
 import { getAlerts } from "../../../controllers/user/alerts.controller";
 import { transactions } from "../../../controllers/user/transactions.controller";
+import { getQR } from "../../../controllers/user/getQR.controller";
 
 const router = Router();
 
@@ -33,6 +34,8 @@ router.route("/alerts").get(authMiddleware(AUTH_ROLES.USER), getAlerts);
 router
   .route("/transactions")
   .get(authMiddleware(AUTH_ROLES.USER), transactions);
+
+router.route("/get-qr").get(authMiddleware(AUTH_ROLES.USER), getQR);
 
 // POST ENDPOINTS
 // ----------------

@@ -25,6 +25,7 @@ import { fileToS3, S3PATHS } from "../../../middlewares/fileToS3.middleware";
 import { playerProfileUpload } from "../../../controllers/admin/playerProfileUpload.controller";
 import { deleteProfileImg } from "../../../controllers/admin/deleteProfileImg.controller";
 import { transactions } from "../../../controllers/admin/transactions.controller";
+import { getQR } from "../../../controllers/admin/getQR.controller";
 
 const router = Router();
 
@@ -36,6 +37,8 @@ router.route("/all-events").get(authMiddleware(AUTH_ROLES.ADMIN), getAllEvents);
 router
   .route("/transactions")
   .get(authMiddleware(AUTH_ROLES.ADMIN), transactions);
+
+router.route("/get-qr").get(authMiddleware(AUTH_ROLES.ADMIN), getQR);
 
 // POST ENDPOINTS
 // -----------------
