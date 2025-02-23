@@ -52,7 +52,7 @@ const Dashboard = () => {
                 eventId={event._id}
                 prizePool={event.prizePool}
                 team1Name={event.team1Name}
-                team2Name={team2Name}
+                team2Name={event.team2Name}
               />
             ))
           ) : (
