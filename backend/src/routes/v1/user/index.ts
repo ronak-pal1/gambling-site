@@ -10,7 +10,10 @@ import { AUTH_ROLES } from "../../../utils/roles";
 import { getSingleEvent } from "../../../controllers/user/getSingleEvent.controller";
 import { handleRefreshAccessToken } from "../../../utils/handleRefreshToken";
 import { handleLogout } from "../../../controllers/handleLogout.controller";
-import { initiateBet } from "../../../controllers/user/bet.controller";
+import {
+  acceptBet,
+  initiateBet,
+} from "../../../controllers/user/bet.controller";
 import { getAlerts } from "../../../controllers/user/alerts.controller";
 import { transactions } from "../../../controllers/user/transactions.controller";
 
@@ -42,5 +45,7 @@ router.route("/refresh-token").post(handleRefreshAccessToken(AUTH_ROLES.USER));
 router
   .route("/initiate-bet")
   .post(authMiddleware(AUTH_ROLES.USER), initiateBet);
+
+router.route("/accept-bet").post(authMiddleware(AUTH_ROLES.USER), acceptBet);
 
 export default router;

@@ -5,7 +5,11 @@ import { authMiddleware } from "../../../middlewares/auth.middleware";
 import { AUTH_ROLES } from "../../../utils/roles";
 import { addEvent } from "../../../controllers/admin/addEvent.controller";
 import { addCoins } from "../../../controllers/admin/addCoins.controller";
-import { getUsers } from "../../../controllers/admin/getUsers.controller";
+import {
+  getUsers,
+  removeUser,
+  setUserBlockState,
+} from "../../../controllers/admin/getUsers.controller";
 import {
   deleteEvent,
   modifyEvent,
@@ -70,6 +74,11 @@ router
 router
   .route("/delete-profile")
   .post(authMiddleware(AUTH_ROLES.ADMIN), deleteProfileImg);
+
+router.route("/remove-user").post(authMiddleware(AUTH_ROLES.ADMIN), removeUser);
+router
+  .route("/set-user-block-state")
+  .post(authMiddleware(AUTH_ROLES.ADMIN), setUserBlockState);
 
 // temporary routes
 // router.route("/create-admin").post(createadmin);

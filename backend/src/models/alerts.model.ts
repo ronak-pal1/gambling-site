@@ -2,6 +2,7 @@ import { Model, Schema, model } from "mongoose";
 
 export interface IAlert extends Document {
   by: Schema.Types.ObjectId;
+  acceptedBy: Schema.Types.ObjectId;
   eventId: Schema.Types.ObjectId;
   amount: number;
   endTime: Date;
@@ -15,6 +16,9 @@ const AlertSchema: Schema<IAlert> = new Schema<IAlert>(
     by: {
       type: Schema.Types.ObjectId,
       required: true,
+    },
+    acceptedBy: {
+      type: Schema.Types.ObjectId,
     },
     eventId: {
       type: Schema.Types.ObjectId,

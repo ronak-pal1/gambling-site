@@ -21,6 +21,11 @@ export const login = asyncHandler(async (req: Request, res: Response) => {
       return res.status(404).json({ message: "User not found." });
     }
 
+    if (user.isBlocked) {
+      res.status(403).json({ message: "User is blocked" });
+      return;
+    }
+
     // Verify the password
     const isPasswordValid = await user.isPasswordCorrect(password);
     if (!isPasswordValid) {

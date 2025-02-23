@@ -78,6 +78,57 @@ export const acceptBet = asyncHandler(async (req: Request, res: Response) => {
   const amount = req.body.amount;
 
   try {
+    const alert = await AlertModel.findOne({
+      _id: alertId,
+    });
+
+    if (!alert) {
+      res.status(400).json({ message: "Invalid alert" });
+      return;
+    }
+
+    await AlertModel.updateOne(
+      {
+        _id: alertId,
+      },
+      {
+        $set: {
+          acceptedBy: user._id,
+          status: "Matched",
+        },
+      }
+    );
+
+    const newTransaction = new TransactionModel({
+      userId: user._id,
+      odds: alert.odds,
+      amount,
+      status: "Matched",
+      eventId: alert.eventId,
+      type: TRANSAC_TYPE.bet,
+    });
+
+    await newTransaction.save();
+
+    await EventModel.updateOne(
+      { _id: alert.eventId },
+      {
+        $inc: { prizePool: amount },
+      }
+    );
+
+    await UserModel.updateOne(
+      {
+        _id: user._id,
+      },
+      {
+        $set: {
+          coinBalance: user.coinBalance - amount,
+        },
+      }
+    );
+
+    res.status(200).json({ message: "Bet is accepted successfully" });
   } catch (e) {
     return res.status(500).json({ message: "Error in accepting the bet" });
   }

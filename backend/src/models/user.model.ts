@@ -9,6 +9,7 @@ export interface IUser extends Document {
   password: string;
   coinBalance: number;
   refreshToken: string;
+  isBlocked: boolean;
   isPasswordCorrect(password: string): Promise<boolean>;
   generateAccessToken(): string;
   generateRefreshToken(): string;
@@ -34,6 +35,10 @@ const UserSchema: Schema<IUser> = new Schema<IUser>(
     coinBalance: {
       type: Number,
       default: 0,
+    },
+    isBlocked: {
+      type: Boolean,
+      default: false,
     },
     refreshToken: {
       type: String,

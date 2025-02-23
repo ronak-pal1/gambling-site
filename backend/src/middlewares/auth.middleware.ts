@@ -31,6 +31,9 @@ export const authMiddleware = (requiredRole: AUTH_ROLES) => {
           throw new AppError("Invalid Access Token", 401);
         }
 
+        if (user.isBlocked) {
+          throw new AppError("User is blocked", 403);
+        }
         req.user = user;
       } else if (requiredRole == AUTH_ROLES.ADMIN) {
         const admin = await AdminModel.findById(decodedToken?._id).select(

@@ -39,13 +39,8 @@ export const getAlerts = asyncHandler(async (req: Request, res: Response) => {
           team: 1,
           status: 1,
           sportName: "$eventDetails.sportName",
-          matchBetween: {
-            $concat: [
-              "$eventDetails.team1.teamName",
-              " vs ",
-              "$eventDetails.team2.teamName",
-            ],
-          },
+          team1: "$eventDetails.team1.teamName",
+          team2: "$eventDetails.team2.teamName",
         },
       },
     ]);

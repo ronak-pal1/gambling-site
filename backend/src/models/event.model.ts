@@ -4,7 +4,7 @@ type Team = {
   teamName: string;
   players: { name: string; role: string; img: string }[];
   odds: number;
-  score: number;
+  score: string;
 };
 
 export interface IEvent extends Document {
@@ -54,8 +54,8 @@ const EventSchema: Schema<IEvent> = new Schema<IEvent>(
         default: 1,
       },
       score: {
-        type: Number,
-        default: 0,
+        type: String,
+        default: "0",
       },
     },
     team2: {
@@ -88,8 +88,8 @@ const EventSchema: Schema<IEvent> = new Schema<IEvent>(
         default: 1,
       },
       score: {
-        type: Number,
-        default: 0,
+        type: String,
+        default: "0",
       },
     },
 
