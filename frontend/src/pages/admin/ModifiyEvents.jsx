@@ -205,10 +205,8 @@ const ModifyEventModalContent = ({ content }) => {
                 <input
                   type="number"
                   value={team1Odd}
-                  onChange={(e) => setTeam1Odd(parseInt(e.target.value))}
+                  onChange={(e) => setTeam1Odd(parseFloat(e.target.value))}
                   className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 p-2 border"
-                  step="0.1"
-                  min="1"
                 />
               </div>
             </div>
