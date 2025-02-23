@@ -10,6 +10,7 @@ export enum TRANSAC_TYPE {
 export interface ITransaction extends Document {
   userId: Schema.Types.ObjectId | IUser;
   eventId: Schema.Types.ObjectId | IEvent;
+  team: string;
   amount: number;
   odds: number;
   type: TRANSAC_TYPE;
@@ -29,6 +30,9 @@ const TransactionSchema: Schema<ITransaction> = new Schema<ITransaction>(
     },
     amount: {
       type: Number,
+    },
+    team: {
+      type: String,
     },
     type: {
       type: String,

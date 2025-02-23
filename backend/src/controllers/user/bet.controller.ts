@@ -43,6 +43,7 @@ export const initiateBet = asyncHandler(async (req: Request, res: Response) => {
       amount,
       status: "Pending",
       eventId,
+      team,
       type: TRANSAC_TYPE.bet,
     });
 
@@ -103,6 +104,7 @@ export const acceptBet = asyncHandler(async (req: Request, res: Response) => {
       userId: user._id,
       odds: alert.odds,
       amount,
+      team: alert.team,
       status: "Matched",
       eventId: alert.eventId,
       type: TRANSAC_TYPE.bet,
