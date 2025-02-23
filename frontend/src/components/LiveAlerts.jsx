@@ -78,7 +78,7 @@ const AlertCard = ({
     <>
       <Modal open={isAlertModalOpen}>
         <div className="w-full h-full flex items-center justify-center">
-          <div className="bg-white w-[50%] rounded-lg text-center py-3 px-4">
+          <div className="bg-white w-[90%] md:w-[50%] rounded-lg text-center py-3 px-4">
             <div className="w-full flex justify-end text-2xl">
               <CloseIcon
                 onClick={() => setIsAlertModalOpen(false)}
@@ -86,12 +86,12 @@ const AlertCard = ({
                 className="cursor-pointer"
               />
             </div>
-            <h1 className="text-3xl font-medium">
+            <h1 className="text-lg md:text-3xl font-medium">
               Accept bet on {team == team1 ? team2 : team1}
             </h1>
 
             <div className="my-6">
-              <div className="flex items-center justify-center space-x-5">
+              <div className="flex items-center justify-center space-x-5  text-xs md:text-base">
                 <div>
                   <input
                     type="checkbox"
@@ -143,13 +143,15 @@ const AlertCard = ({
               </div>
 
               <div className="my-7 items-center w-full">
-                <p className="text-xl font-semibold">Total: {totalAmount}/-</p>
+                <p className="text-base md:text-xl font-semibold">
+                  Total: {totalAmount}/-
+                </p>
               </div>
             </div>
 
             <button
               onClick={acceptBet}
-              className={`bg-[#fee715d5] px-5 py-1 text-lg font-medium rounded-md w-fit text-center  ${
+              className={`bg-[#fee715d5] px-5 py-1 text-sm md:text-lg font-medium rounded-md w-fit text-center  ${
                 totalAmount == 0 && "opacity-70"
               }`}
             >

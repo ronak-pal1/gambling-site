@@ -43,6 +43,7 @@ const TransactionsPage = () => {
                 <tr>
                   <th>Date</th>
                   <th>Event</th>
+                  <th>Team</th>
                   <th>Bid</th>
                   <th>Amount</th>
                   <th>Status</th>
@@ -54,7 +55,8 @@ const TransactionsPage = () => {
                   transactionsBet.map((t) => (
                     <tr key={t._id}>
                       <td>{formatDate(t.createdAt)}</td>
-                      <td>Cricket</td>
+                      <td>{t.team}</td>
+                      <td>{t.eventName}</td>
                       <td className="text-blue-600">{t.odds}x</td>
                       <td>
                         <div className="flex items-centerm w-full justify-center space-x-3">
