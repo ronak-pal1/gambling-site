@@ -41,6 +41,13 @@ export const getAlerts = asyncHandler(async (req: Request, res: Response) => {
           sportName: "$eventDetails.sportName",
           team1: "$eventDetails.team1.teamName",
           team2: "$eventDetails.team2.teamName",
+          oppositeOdds: {
+            $cond: {
+              if: { $eq: ["$eventDetails.team1.teamName", "$team"] },
+              then: "$eventDetails.team2.odds",
+              else: "$eventDetails.team1.odds",
+            },
+          },
         },
       },
     ]);

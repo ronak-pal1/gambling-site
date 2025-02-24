@@ -40,6 +40,9 @@ export const transactions = asyncHandler(
             odds: 1,
           },
         },
+        {
+          $sort: { createdAt: -1 }, // Sorts by date in ascending order
+        },
       ]);
 
       res

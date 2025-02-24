@@ -7,6 +7,7 @@ import {
 } from "../../models/transactions.model";
 import { EventModel } from "../../models/event.model";
 import { UserModel } from "../../models/user.model";
+import mongoose from "mongoose";
 
 export const initiateBet = asyncHandler(async (req: Request, res: Response) => {
   const user = req.user;
@@ -25,18 +26,6 @@ export const initiateBet = asyncHandler(async (req: Request, res: Response) => {
       .json({ message: "Betting details are not provided" });
 
   try {
-    const newAlert = new AlertModel({
-      by: user._id,
-      eventId,
-      endTime,
-      amount,
-      odds,
-      team,
-      status: "Pending",
-    });
-
-    await newAlert.save();
-
     const newTransaction = new TransactionModel({
       userId: user._id,
       odds,
@@ -48,6 +37,19 @@ export const initiateBet = asyncHandler(async (req: Request, res: Response) => {
     });
 
     await newTransaction.save();
+
+    const newAlert = new AlertModel({
+      by: user._id,
+      eventId,
+      endTime,
+      amount,
+      odds,
+      team,
+      previousTransactionId: newTransaction._id,
+      status: "Pending",
+    });
+
+    await newAlert.save();
 
     await EventModel.updateOne(
       { _id: eventId },
@@ -78,15 +80,68 @@ export const acceptBet = asyncHandler(async (req: Request, res: Response) => {
   const alertId = req.body.alertId;
   const amount = req.body.amount;
 
+  if (user.coinBalance < amount) {
+    return res.status(400).json({ message: "Amount exceded" });
+  }
+
   try {
-    const alert = await AlertModel.findOne({
-      _id: alertId,
-    });
+    const alertArr = await AlertModel.aggregate([
+      {
+        $match: { _id: new mongoose.Types.ObjectId(alertId) }, // Find the specific alert
+      },
+      {
+        $lookup: {
+          from: "events", // Collection name for EventModel
+          localField: "eventId", // Field in AlertModel
+          foreignField: "_id", // Field in EventModel
+          as: "eventData",
+        },
+      },
+      {
+        $unwind: "$eventData", // Convert eventData array to an object
+      },
+      {
+        $project: {
+          _id: 1,
+          eventId: 1,
+          "eventData.team1": 1,
+          "eventData.team2": 1,
+          odds: 1,
+          team: 1,
+          amount: 1,
+          previousTransactionId: 1,
+          by: 1,
+          status: 1,
+        },
+      },
+    ]);
+
+    const alert = alertArr[0];
 
     if (!alert) {
       res.status(400).json({ message: "Invalid alert" });
       return;
     }
+
+    if (alert.status == "Matched") {
+      return res.status(400).json({ message: "Bet is alrady matched" });
+    }
+
+    if (amount == 0 || alert.amount == 0)
+      return res.status(400).json({ message: "Bets can be 0" });
+
+    const oppositeTeam =
+      alert.eventData.team1.teamName == alert.team
+        ? alert.eventData.team2
+        : alert.eventData.team1;
+
+    console.log(oppositeTeam);
+
+    let remainingAmount =
+      alert.amount * alert.odds - (amount * oppositeTeam.odds) / alert.odds;
+
+    if (amount * oppositeTeam.odds > alert.amount * alert.odds)
+      remainingAmount = 0;
 
     await AlertModel.updateOne(
       {
@@ -95,27 +150,61 @@ export const acceptBet = asyncHandler(async (req: Request, res: Response) => {
       {
         $set: {
           acceptedBy: user._id,
-          status: "Matched",
+          amount: remainingAmount,
+
+          status:
+            alert.amount * alert.odds == amount * oppositeTeam.odds
+              ? "Matched"
+              : "Partial",
         },
       }
     );
 
     const newTransaction = new TransactionModel({
       userId: user._id,
-      odds: alert.odds,
-      amount,
-      team: alert.team,
-      status: "Matched",
+      odds: oppositeTeam.odds,
+      amount:
+        amount * oppositeTeam.odds > alert.amount * alert.odds
+          ? (amount * oppositeTeam.odds - alert.amount * alert.odds) /
+            oppositeTeam.odds
+          : amount,
+      team: oppositeTeam.teamName,
+      status:
+        alert.amount * alert.odds <= amount * oppositeTeam.odds
+          ? "Matched"
+          : "Partial",
       eventId: alert.eventId,
       type: TRANSAC_TYPE.bet,
     });
 
     await newTransaction.save();
 
+    console.log(alert.amount * alert.odds, amount * oppositeTeam.odds);
+    console.log(alert.by);
+
+    if (alert.amount * alert.odds <= amount * oppositeTeam.odds) {
+      console.log("here ");
+      await TransactionModel.updateOne(
+        {
+          _id: alert.previousTransactionId,
+        },
+        {
+          $set: {
+            status: "Matched",
+          },
+        }
+      );
+    }
+
     await EventModel.updateOne(
       { _id: alert.eventId },
       {
-        $inc: { prizePool: amount },
+        $inc: {
+          prizePool:
+            amount * oppositeTeam.odds > alert.amount * alert.odds
+              ? alert.amount
+              : amount,
+        },
       }
     );
 
@@ -125,13 +214,19 @@ export const acceptBet = asyncHandler(async (req: Request, res: Response) => {
       },
       {
         $set: {
-          coinBalance: user.coinBalance - amount,
+          coinBalance:
+            user.coinBalance -
+            (amount * oppositeTeam.odds > alert.amount * alert.odds
+              ? (amount * oppositeTeam.odds - alert.amount * alert.odds) /
+                oppositeTeam.odds
+              : amount),
         },
       }
     );
 
     res.status(200).json({ message: "Bet is accepted successfully" });
   } catch (e) {
+    console.log(e);
     return res.status(500).json({ message: "Error in accepting the bet" });
   }
 });

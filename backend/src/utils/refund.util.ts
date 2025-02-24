@@ -8,7 +8,8 @@ const checkExpiredAlerts = async () => {
     // Every minute
     console.log("Checking for expired bets...");
     const alerts = await AlertModel.find({
-      status: "Pending",
+      $or: [{ status: "Pending" }, { status: "Partial" }],
+
       endTime: { $lt: new Date() },
     });
 

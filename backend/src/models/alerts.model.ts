@@ -1,4 +1,4 @@
-import { Model, Schema, model } from "mongoose";
+import { Model, Schema, SchemaType, model } from "mongoose";
 
 export interface IAlert extends Document {
   by: Schema.Types.ObjectId;
@@ -9,6 +9,7 @@ export interface IAlert extends Document {
   odds: number;
   team: string;
   status: string;
+  previousTransactionId: Schema.Types.ObjectId;
 }
 
 const AlertSchema: Schema<IAlert> = new Schema<IAlert>(
@@ -19,6 +20,10 @@ const AlertSchema: Schema<IAlert> = new Schema<IAlert>(
     },
     acceptedBy: {
       type: Schema.Types.ObjectId,
+    },
+    previousTransactionId: {
+      type: Schema.Types.ObjectId,
+      required: true,
     },
     eventId: {
       type: Schema.Types.ObjectId,
