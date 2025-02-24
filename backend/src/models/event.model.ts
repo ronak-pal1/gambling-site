@@ -5,6 +5,7 @@ type Team = {
   players: { name: string; role: string; img: string }[];
   odds: number;
   score: string;
+  logo: string;
 };
 
 export interface IEvent extends Document {
@@ -15,6 +16,8 @@ export interface IEvent extends Document {
   startTime: string;
   endTime: string;
   prizePool: number;
+  prizePoolLabel: string;
+  isPinned: boolean;
 }
 
 const EventSchema: Schema<IEvent> = new Schema<IEvent>(
@@ -57,6 +60,10 @@ const EventSchema: Schema<IEvent> = new Schema<IEvent>(
         type: String,
         default: "0",
       },
+      logo: {
+        type: String,
+        default: "",
+      },
     },
     team2: {
       teamName: {
@@ -91,6 +98,10 @@ const EventSchema: Schema<IEvent> = new Schema<IEvent>(
         type: String,
         default: "0",
       },
+      logo: {
+        type: String,
+        default: "",
+      },
     },
 
     date: {
@@ -110,6 +121,14 @@ const EventSchema: Schema<IEvent> = new Schema<IEvent>(
     prizePool: {
       type: Number,
       required: true,
+    },
+    prizePoolLabel: {
+      type: String,
+    },
+
+    isPinned: {
+      type: Boolean,
+      default: false,
     },
   },
   {

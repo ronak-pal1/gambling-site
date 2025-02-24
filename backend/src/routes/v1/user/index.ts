@@ -3,6 +3,7 @@ import { login } from "../../../controllers/user/login.controller";
 import {
   getAllEvents,
   getOngoingEvents,
+  getPinnedEvents,
 } from "../../../controllers/user/getEvents.controller";
 import { getCurrentUser } from "../../../controllers/user/getCurrentUser.controller";
 import { authMiddleware } from "../../../middlewares/auth.middleware";
@@ -23,9 +24,14 @@ const router = Router();
 // GET ENDPOINTS
 // ----------------
 router.route("/events").get(authMiddleware(AUTH_ROLES.USER), getAllEvents);
+// router
+//   .route("/ongoing-events")
+//   .get(authMiddleware(AUTH_ROLES.USER), getOngoingEvents);
+
 router
-  .route("/ongoing-events")
-  .get(authMiddleware(AUTH_ROLES.USER), getOngoingEvents);
+  .route("/pinned-events")
+  .get(authMiddleware(AUTH_ROLES.USER), getPinnedEvents);
+
 router.route("/get-user").get(authMiddleware(AUTH_ROLES.USER), getCurrentUser);
 router.route("/event/:id").get(authMiddleware(AUTH_ROLES.USER), getSingleEvent);
 

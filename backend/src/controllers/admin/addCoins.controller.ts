@@ -38,6 +38,7 @@ export const addCoins = asyncHandler(async (req: Request, res: Response) => {
       type: TRANSAC_TYPE.coinbuy,
     });
 
+    console.log(newTransaction);
     await newTransaction.save();
 
     res

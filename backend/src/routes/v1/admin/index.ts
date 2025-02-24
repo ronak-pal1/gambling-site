@@ -22,7 +22,7 @@ import { handleLogout } from "../../../controllers/handleLogout.controller";
 import { getAllEvents } from "../../../controllers/admin/getAllEvents.controller";
 import upload from "../../../middlewares/fileUpload.middleware";
 import { fileToS3, S3PATHS } from "../../../middlewares/fileToS3.middleware";
-import { playerProfileUpload } from "../../../controllers/admin/playerProfileUpload.controller";
+import { profileUpload } from "../../../controllers/admin/profileUpload.controller";
 import { deleteProfileImg } from "../../../controllers/admin/deleteProfileImg.controller";
 import { transactions } from "../../../controllers/admin/transactions.controller";
 import { getQR } from "../../../controllers/admin/getQR.controller";
@@ -71,7 +71,16 @@ router
     authMiddleware(AUTH_ROLES.ADMIN),
     upload.single("playerImg"),
     fileToS3(S3PATHS.PLAYER_IMG),
-    playerProfileUpload
+    profileUpload
+  );
+
+router
+  .route("/upload-team-profile")
+  .post(
+    authMiddleware(AUTH_ROLES.ADMIN),
+    upload.single("teamImg"),
+    fileToS3(S3PATHS.TEAM_IMG),
+    profileUpload
   );
 
 router

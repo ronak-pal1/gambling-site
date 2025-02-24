@@ -16,7 +16,11 @@ export const getAllEvents = asyncHandler(
             prizePool: 1,
             team1Name: "$team1.teamName",
             team2Name: "$team2.teamName",
+            prizePoolLabel: 1,
           },
+        },
+        {
+          $sort: { date: -1 },
         },
       ]);
 
@@ -64,6 +68,7 @@ export const getOngoingEvents = asyncHandler(
             prizePool: 1,
             team1Name: "$team1.teamName",
             team2Name: "$team2.teamName",
+            prizePoolLabel: 1,
           },
         },
       ]);
@@ -75,6 +80,46 @@ export const getOngoingEvents = asyncHandler(
       res
         .status(500)
         .json({ message: "An error occurred while getting events" });
+    }
+  }
+);
+
+export const getPinnedEvents = asyncHandler(
+  async (req: Request, res: Response) => {
+    try {
+      const events = await EventModel.aggregate([
+        {
+          $match: {
+            isPinned: true,
+          },
+        },
+        {
+          $project: {
+            _id: 1,
+            sportName: 1,
+            date: 1,
+            startTime: 1,
+            endTime: 1,
+            prizePool: 1,
+            team1Name: "$team1.teamName",
+            team2Name: "$team2.teamName",
+            prizePoolLabel: 1,
+          },
+        },
+        {
+          $sort: {
+            date: -1,
+          },
+        },
+      ]);
+
+      res
+        .status(200)
+        .json({ message: "All pinned events fetched successfully", events });
+    } catch (e) {
+      res
+        .status(500)
+        .json({ message: "An error occurred while getting pinned events" });
     }
   }
 );

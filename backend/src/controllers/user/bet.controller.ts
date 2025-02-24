@@ -138,11 +138,12 @@ export const acceptBet = asyncHandler(async (req: Request, res: Response) => {
     console.log(oppositeTeam);
 
     let remainingAmount =
-      alert.amount * alert.odds - (amount * oppositeTeam.odds) / alert.odds;
+      (alert.amount * alert.odds - amount * oppositeTeam.odds) / alert.odds;
 
     if (amount * oppositeTeam.odds > alert.amount * alert.odds)
       remainingAmount = 0;
 
+    console.log(alert.amount * alert.odds, amount * oppositeTeam.odds);
     await AlertModel.updateOne(
       {
         _id: alertId,
@@ -153,7 +154,7 @@ export const acceptBet = asyncHandler(async (req: Request, res: Response) => {
           amount: remainingAmount,
 
           status:
-            alert.amount * alert.odds == amount * oppositeTeam.odds
+            alert.amount * alert.odds <= amount * oppositeTeam.odds
               ? "Matched"
               : "Partial",
         },
@@ -165,8 +166,7 @@ export const acceptBet = asyncHandler(async (req: Request, res: Response) => {
       odds: oppositeTeam.odds,
       amount:
         amount * oppositeTeam.odds > alert.amount * alert.odds
-          ? (amount * oppositeTeam.odds - alert.amount * alert.odds) /
-            oppositeTeam.odds
+          ? alert.amount / oppositeTeam.odds
           : amount,
       team: oppositeTeam.teamName,
       status:
@@ -179,11 +179,7 @@ export const acceptBet = asyncHandler(async (req: Request, res: Response) => {
 
     await newTransaction.save();
 
-    console.log(alert.amount * alert.odds, amount * oppositeTeam.odds);
-    console.log(alert.by);
-
     if (alert.amount * alert.odds <= amount * oppositeTeam.odds) {
-      console.log("here ");
       await TransactionModel.updateOne(
         {
           _id: alert.previousTransactionId,
@@ -217,8 +213,7 @@ export const acceptBet = asyncHandler(async (req: Request, res: Response) => {
           coinBalance:
             user.coinBalance -
             (amount * oppositeTeam.odds > alert.amount * alert.odds
-              ? (amount * oppositeTeam.odds - alert.amount * alert.odds) /
-                oppositeTeam.odds
+              ? alert.amount / oppositeTeam.odds
               : amount),
         },
       }

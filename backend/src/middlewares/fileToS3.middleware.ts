@@ -9,6 +9,7 @@ const s3 = new S3Client({ region: process.env.AWS_REGION });
 export enum S3PATHS {
   "QR" = "qr-codes",
   "PLAYER_IMG" = "player-images",
+  "TEAM_IMG" = "team-images",
 }
 
 export const fileToS3 = (path: S3PATHS) => {

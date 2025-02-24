@@ -24,7 +24,10 @@ export const transactions = asyncHandler(
           },
         },
         {
-          $unwind: "$eventDetails", // Convert eventDetails array into an object
+          $unwind: {
+            path: "$eventDetails",
+            preserveNullAndEmptyArrays: true, // Allows transactions without an eventId
+          },
         },
         {
           $project: {
