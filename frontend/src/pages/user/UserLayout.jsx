@@ -30,11 +30,11 @@ const UserLayout = () => {
 
   return (
     <div className="w-full h-screen flex flex-1 flex-col overflow-y-hidden">
-      <div className="flex-[0.1] h-full">
+      <div className="flex-[0.05] md:flex-[0.1] h-full">
         <Header isAuthenticated={isAuthenticated} userInfo={userInfo} />
       </div>
 
-      <div className="flex-[0.9] h-full overflow-y-scroll">
+      <div className="flex-[0.95] md:flex-[0.9] h-full overflow-y-scroll">
         <Outlet />
       </div>
     </div>
