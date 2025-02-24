@@ -1,4 +1,4 @@
-import { Outlet, useLocation, useNavigate } from "react-router-dom";
+import { Outlet, useNavigate } from "react-router-dom";
 import Header from "../../components/Header";
 import userApi from "../../apis/userApi";
 import { useEffect, useState } from "react";
@@ -7,7 +7,6 @@ const UserLayout = () => {
   const navigate = useNavigate();
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [userInfo, setUserInfo] = useState(undefined);
-  const location = useLocation();
 
   const getUser = async () => {
     try {

@@ -22,7 +22,14 @@ const PlayerCard = ({ name, role, img }) => {
   );
 };
 
-const TeamCard = ({ teamPosition, teamName, players, score, odds }) => {
+const TeamCard = ({
+  teamPosition,
+  teamName,
+  players,
+  score,
+  odds,
+  teamLogo,
+}) => {
   const [isPlayersContainerOpen, setIsPlayerContainerOpen] = useState(false);
   const [isBettingModalOpen, setIsBettingModalOpen] = useState(false);
   const [totalAmount, setTotalAmount] = useState(0);
@@ -145,7 +152,7 @@ const TeamCard = ({ teamPosition, teamName, players, score, odds }) => {
               <div className="my-7 items-center w-full space-y-3">
                 <p className="text-xl font-semibold">Total: {totalAmount}/-</p>
                 <p className="text-xl font-semibold text-blue-500">
-                  Win amount: {totalAmount * odds}/-
+                  Win amount: {(totalAmount * odds).toFixed(2)}/-
                 </p>
               </div>
 
@@ -255,26 +262,35 @@ const TeamCard = ({ teamPosition, teamName, players, score, odds }) => {
       </div>
 
       <div className="w-full flex flex-col items-center justify-center space-y-5">
-        <div className="md:w-[100px] md:h-[100px] w-[50px] h-[50px] rounded-full bg-yellow-100"></div>
+        <div
+          className={`md:w-[100px] md:h-[100px] w-[50px] h-[50px] rounded-full bg-transparent border border-slate-400`}
+        >
+          {teamLogo && (
+            <img
+              className="w-full h-full object-cover rounded-full"
+              src={teamLogo}
+            />
+          )}
+        </div>
 
-        <h1 className="text-white text-3xl">{teamName}</h1>
+        <h1 className="text-white text-xl  md:text-3xl">{teamName}</h1>
       </div>
 
-      <div className="w-full flex flex-col items-center justify-center my-3">
+      <div className="w-full flex flex-col items-center justify-center mt-3 md:mt-8">
         <button
           onClick={() => setIsPlayerContainerOpen(true)}
-          className="bg-slate-200 px-5 py-1 text-sm md:text-lg rounded-md w-fit text-black "
+          className="bg-slate-200 px-5 py-1 text-xs md:text-lg rounded-md w-fit text-black "
         >
           Show all players
         </button>
-        <div className="flex items-center mt-10 space-x-4">
-          <h2 className="text-white text-xl md:text-4xl">Score:</h2>
-          <p className="text-yellow-300 text-2xl md:text-5xl">{score}</p>
+        <div className="flex items-center mt-3 md:mt-10 space-x-4">
+          <h2 className="text-white text-lg md:text-4xl">Score:</h2>
+          <p className="text-yellow-300 text-base md:text-5xl">{score}</p>
         </div>
 
-        <div className="flex items-center mt-3 md:mt-10 space-x-4">
-          <h2 className="text-white text-xl md:text-4xl">Odds:</h2>
-          <p className="text-yellow-300 text-2xl md:text-5xl">{odds}</p>
+        <div className="flex items-center my-3 md:mt-10 space-x-4">
+          <h2 className="text-white text-lg md:text-4xl">Odds:</h2>
+          <p className="text-yellow-300 text-base md:text-5xl">{odds}</p>
         </div>
       </div>
 
@@ -315,7 +331,7 @@ const EventPage = () => {
 
   return (
     <div className="w-full h-full flex flex-1 flex-col pt-6 relative">
-      <div className="flex-1 w-full h-full flex items-center flex-col md:flex-row overflow-x-hidden overflow-y-scroll md:overflow-y-hidden pb-32 md:pb-0 space-y-3">
+      <div className="flex-1 w-full h-full flex items-center flex-col md:flex-row overflow-x-hidden overflow-y-scroll md:overflow-y-hidden pb-32 md:pb-0 space-y-0 md:space-y-3">
         <div className="flex-[0.4] w-full h-full [&>div]:rounded-r-lg">
           <TeamCard
             teamPosition={"left"}
@@ -323,14 +339,15 @@ const EventPage = () => {
             players={eventInfo?.team1.players}
             odds={eventInfo?.team1.odds}
             score={eventInfo?.team1.score}
+            teamLogo={eventInfo?.team1.logo}
           />
         </div>
 
-        <div className="flex-[0.2] text-center space-y-4">
-          <h1 className=" text-xl md:text-3xl text-yellow-200 px-2">
+        <div className="flex-[0.2] text-center space-y-4 bg-black w-full h-full py-3">
+          <h1 className=" text-xl md:text-3xl text-yellow-200 font-medium">
             {eventInfo?.sportName}
           </h1>
-          <p className="text-white text-3xl md:text-7xl">VS</p>
+          <p className="text-white text-lg md:text-7xl">VS</p>
         </div>
 
         <div className="flex-[0.4] w-full h-full [&>div]:rounded-l-lg">
@@ -340,6 +357,7 @@ const EventPage = () => {
             players={eventInfo?.team2.players}
             odds={eventInfo?.team2.odds}
             score={eventInfo?.team2.score}
+            teamLogo={eventInfo?.team2.logo}
           />
         </div>
       </div>

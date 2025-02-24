@@ -45,7 +45,17 @@ const TransactionsPage = () => {
                   <th>Event</th>
                   <th>Team</th>
                   <th>Bid</th>
-                  <th>Amount</th>
+                  <th>
+                    <div className="flex items-centerm w-full justify-center space-x-3">
+                      <img
+                        src={coinSVG}
+                        alt="coins"
+                        className="w-5 object-contain"
+                      />
+                      <p>Amount</p>
+                    </div>
+                  </th>
+
                   <th>Status</th>
                 </tr>
               </thead>
@@ -58,16 +68,7 @@ const TransactionsPage = () => {
                       <td>{t.team}</td>
                       <td>{t.eventName}</td>
                       <td className="text-blue-600">{t.odds}x</td>
-                      <td>
-                        <div className="flex items-centerm w-full justify-center space-x-3">
-                          <img
-                            src={coinSVG}
-                            alt="coins"
-                            className="w-5 object-contain"
-                          />
-                          <p>{t.amount}</p>
-                        </div>
-                      </td>
+                      <td>{parseFloat(t.amount).toFixed(2)}</td>
                       <td>{t.status}</td>
                     </tr>
                   ))}
@@ -89,7 +90,16 @@ const TransactionsPage = () => {
               <thead className="[&>tr>th]:py-2 [&>tr>th]:border [&>tr>th]:border-slate-400 text-white">
                 <tr>
                   <th>Date</th>
-                  <th>Amount</th>
+                  <th>
+                    <div className="flex items-centerm w-full justify-center space-x-3">
+                      <img
+                        src={coinSVG}
+                        alt="coins"
+                        className="w-5 object-contain"
+                      />
+                      <p>Amount</p>
+                    </div>
+                  </th>
                 </tr>
               </thead>
 
@@ -98,16 +108,7 @@ const TransactionsPage = () => {
                   transactionsCoinBuy.map((t) => (
                     <tr key={t._id}>
                       <td>{formatDate(t.createdAt)}</td>
-                      <td>
-                        <div className="flex items-centerm w-full justify-center space-x-3">
-                          <img
-                            src={coinSVG}
-                            alt="coins"
-                            className="w-5 object-contain"
-                          />
-                          <p>{t.amount}</p>
-                        </div>
-                      </td>
+                      <td>{parseFloat(t.amount).toFixed(2)}</td>
                     </tr>
                   ))}
               </tbody>

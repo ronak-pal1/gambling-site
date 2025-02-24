@@ -151,7 +151,7 @@ const AlertCard = ({
                   Total: {totalAmount}/-
                 </p>
                 <p className="text-base md:text-xl font-semibold">
-                  Win amount: {totalAmount * oppositeOdds}/-
+                  Win amount: {(totalAmount * oppositeOdds).toFixed(2)}/-
                 </p>
               </div>
             </div>
@@ -196,7 +196,7 @@ const AlertCard = ({
             </p>
 
             <div className="md:pl-8">
-              <p className="">Total Amount: {amount * odds}/-</p>
+              <p className="">Total Amount: {(amount * odds).toFixed(2)}/-</p>
             </div>
           </div>
 

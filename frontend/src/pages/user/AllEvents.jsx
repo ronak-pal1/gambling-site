@@ -41,6 +41,7 @@ const AllEvents = () => {
             prizePool={event.prizePool}
             team1Name={event.team1Name}
             team2Name={event.team2Name}
+            prizePoolLabel={event.prizePoolLabel}
           />
         ))}
 

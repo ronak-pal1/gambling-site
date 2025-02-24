@@ -65,12 +65,19 @@ const TeamAddSection = ({
   teamName,
   setTeamName,
   players,
+  setTeamLogo,
+  teamLogo,
   setPlayers,
 }) => {
   const inputRef = useRef(null);
+  const teamLogoInputRef = useRef(null);
 
   const [imgFile, setImgFile] = useState(undefined);
+  const [teamLogoFile, setTeamLogoFile] = useState(undefined);
+  const [isteamLogoUploading, setIsTeamLogoUploading] = useState(false);
+
   const [imgURL, setImgURL] = useState("");
+
   const [isImgUploading, setIsImgUploading] = useState(false);
 
   const [playerName, setPlayerName] = useState("");
@@ -78,8 +85,8 @@ const TeamAddSection = ({
 
   const { showSnackbar } = useSnackbar();
 
-  const simulateFileUpload = () => {
-    inputRef.current.click();
+  const simulateFileUpload = (ref) => {
+    ref.current.click();
   };
 
   const addPlayer = () => {
@@ -129,21 +136,77 @@ const TeamAddSection = ({
     setIsImgUploading(false);
   };
 
+  const uploadTeamLogo = async () => {
+    if (!teamLogoFile) return;
+
+    const formData = new FormData();
+    formData.append("teamImg", teamLogoFile);
+
+    if (teamLogo) formData.append("previousURL", teamLogo);
+
+    setIsTeamLogoUploading(true);
+
+    try {
+      const res = await adminApi.post("/upload-team-profile", formData);
+
+      if (res.status == 200) {
+        setTeamLogo(res.data.imgURL);
+
+        showSnackbar("Team logo uploaded successfully", "success");
+      }
+    } catch (e) {
+      showSnackbar("Error in uploading team logo image", "error");
+    }
+
+    setIsTeamLogoUploading(false);
+  };
+
   useEffect(() => {
     uploadPlayerImg();
   }, [imgFile]);
 
+  useEffect(() => {
+    uploadTeamLogo();
+  }, [teamLogoFile]);
+
   return (
     <div className="my-9 border border-slate-700 rounded-lg px-4 py-7">
-      <h2 className="text-white text-2xl">{label}</h2>
+      <h2 className="text-white text-2xl">{label} informations</h2>
       <div className=" mt-10 space-y-7">
         <InputField
-          label={"Team 1 name"}
+          label={`${label} name`}
           value={teamName}
           setValue={setTeamName}
           type={"text"}
-          placeholder={"Enter team 1 name"}
+          placeholder={`Enter ${label.toLowerCase()} name`}
         />
+        <div className="mt-10 space-y-5">
+          <input
+            onChange={(e) => {
+              setTeamLogoFile(e.target.files[0]);
+            }}
+            ref={teamLogoInputRef}
+            type="file"
+            className="hidden"
+            accept="image/png, image/jpg"
+          />
+
+          <div className="flex items-center space-x-4">
+            <div
+              onClick={() => simulateFileUpload(teamLogoInputRef)}
+              className="text-white w-fit border border-slate-400 rounded-full px-3 py-2 cursor-pointer"
+            >
+              {teamLogoFile ? "Change Team Logo" : "Add Team Logo image"}
+            </div>
+            {teamLogoFile && (
+              <div className="flex items-center space-x-3">
+                <p className=" text-slate-300">{teamLogoFile.name}</p>
+                {isteamLogoUploading && <CircularProgress size={"25px"} />}
+              </div>
+            )}
+          </div>
+        </div>
+
         {/* For adding the players */}
         <div className="pt-6 border-t border-slate-700">
           <p className="text-white text-2xl">Add players</p>
@@ -161,7 +224,7 @@ const TeamAddSection = ({
 
             <div className="flex items-center space-x-4">
               <div
-                onClick={simulateFileUpload}
+                onClick={() => simulateFileUpload(inputRef)}
                 className="text-white w-fit border border-slate-400 rounded-full px-3 py-2 cursor-pointer"
               >
                 {imgFile ? "Change Profile image" : "Add Profile image"}
@@ -231,8 +294,14 @@ const AddEvents = () => {
   const [team1Name, setTeam1Name] = useState("");
   const [team1Players, setTeam1Players] = useState([]);
 
+  const [team1Logo, setTeam1Logo] = useState("");
+
+  const [team2Logo, setTeam2Logo] = useState("");
+
   const [team2Name, setTeam2Name] = useState("");
   const [team2Players, setTeam2Players] = useState([]);
+
+  const [prizePoolLabel, setPrizePoolLabel] = useState("Prize Pool");
 
   const [isLoading, setIsLoading] = useState(false);
   const { showSnackbar } = useSnackbar();
@@ -249,13 +318,16 @@ const AddEvents = () => {
         startTime,
         endTime,
         prizePool,
+        prizePoolLabel,
         team1: {
           teamName: team1Name,
           players: team1Players,
+          logo: team1Logo,
         },
         team2: {
           teamName: team2Name,
           players: team2Players,
+          logo: team2Logo,
         },
       });
 
@@ -310,6 +382,12 @@ const AddEvents = () => {
             setValue={setEndTime}
           />
           <InputField
+            label={"Prize Pool label"}
+            type={"text"}
+            value={prizePoolLabel}
+            setValue={setPrizePoolLabel}
+          />
+          <InputField
             label={"Prize Pool amount"}
             type={"number"}
             value={prizePool}
@@ -318,19 +396,23 @@ const AddEvents = () => {
         </div>
 
         <TeamAddSection
-          label={"Team 1 informations"}
+          label={"Team 1"}
           teamName={team1Name}
           setTeamName={setTeam1Name}
           players={team1Players}
           setPlayers={setTeam1Players}
+          setTeamLogo={setTeam1Logo}
+          teamLogo={team1Logo}
         />
 
         <TeamAddSection
-          label={"Team 2 informations"}
+          label={"Team 2"}
           teamName={team2Name}
           setTeamName={setTeam2Name}
           players={team2Players}
           setPlayers={setTeam2Players}
+          setTeamLogo={setTeam2Logo}
+          teamLogo={team2Logo}
         />
 
         <div className="w-full flex justify-center">

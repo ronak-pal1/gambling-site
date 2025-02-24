@@ -12,6 +12,7 @@ const EventCard = ({
   endTime,
   eventId,
   prizePool,
+  prizePoolLabel,
 }) => {
   const navigate = useNavigate();
 
@@ -42,7 +43,7 @@ const EventCard = ({
 
       <div className="w-full bg-[#FEE715] text-black mt-3 px-3 py-2 rounded-lg">
         <p className="text-base md:text-xl font-medium">
-          Prize pool: {prizePool} INR
+          {prizePoolLabel ? prizePoolLabel : "Prize pool"}: {prizePool} INR
         </p>
       </div>
     </div>

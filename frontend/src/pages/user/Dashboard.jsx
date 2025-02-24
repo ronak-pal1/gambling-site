@@ -10,9 +10,9 @@ const Dashboard = () => {
 
   const [ongoingEvents, setOngoingEvents] = useState([]);
 
-  const fetchOngoingEvents = async () => {
+  const fetchPinnedEvents = async () => {
     try {
-      const res = await userApi.get("/ongoing-events");
+      const res = await userApi.get("/pinned-events");
 
       if (res.status == 200) {
         setOngoingEvents(res.data.events);
@@ -21,7 +21,7 @@ const Dashboard = () => {
   };
 
   useEffect(() => {
-    fetchOngoingEvents();
+    fetchPinnedEvents();
   }, []);
 
   return (
@@ -29,7 +29,7 @@ const Dashboard = () => {
       <div>
         <div className="flex w-full  items-center justify-between mb-7">
           <h1 className="text-white text-lg md:text-2xl font-medium">
-            Ongoing
+            Trending
           </h1>
 
           <button

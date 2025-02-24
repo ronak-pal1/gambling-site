@@ -99,7 +99,7 @@ const Header = ({ isAuthenticated, userInfo }) => {
               >
                 <WalletOutlinedIcon fontSize="inherit" />
                 <p className="font-bold">
-                  {userInfo ? userInfo.balance : "..."}
+                  {userInfo ? parseFloat(userInfo.balance).toFixed(2) : "..."}
                 </p>
                 <img
                   src={coinIcon}
@@ -112,7 +112,9 @@ const Header = ({ isAuthenticated, userInfo }) => {
                 <div className="absolute bg-white w-80 h-fit translate-x-0 mt-2 rounded-md z-50 flex flex-col items-center py-3">
                   <div className="flex items-center space-x-2">
                     <p>Current Balance: </p>
-                    <p className=" font-medium ">{userInfo.balance} </p>
+                    <p className=" font-medium ">
+                      {parseFloat(userInfo.balance).toFixed(2)}{" "}
+                    </p>
                     <img src={coinIcon} alt="coin icon" className="w-4 h-4" />
                   </div>
 
@@ -159,8 +161,6 @@ const Header = ({ isAuthenticated, userInfo }) => {
           </div>
         </div>
 
-        <div></div>
-
         <div className="mt-7 space-y-6">
           {SIDEBAR_BUTTONS.map((button, index) => (
             <div
@@ -198,6 +198,8 @@ const Header = ({ isAuthenticated, userInfo }) => {
       <div className="flex items-center space-x-7">
         {location.pathname != "/" && innerWidth >= 600 && (
           <>
+            <p className="text-white text-lg font-bold">Hii, {userInfo.name}</p>
+
             <div
               className="text-white text-3xl relative cursor-pointer"
               onClick={() => navigate("/alerts")}
@@ -215,7 +217,7 @@ const Header = ({ isAuthenticated, userInfo }) => {
               >
                 <WalletOutlinedIcon fontSize="inherit" />
                 <p className="font-medium">
-                  {userInfo ? userInfo.balance : "..."}{" "}
+                  {userInfo ? parseFloat(userInfo.balance).toFixed(2) : "..."}{" "}
                 </p>
                 <img src={coinIcon} alt="coin icon" className="w-5 h-5" />
               </div>
@@ -224,7 +226,9 @@ const Header = ({ isAuthenticated, userInfo }) => {
                 <div className="absolute bg-white w-80 h-fit -translate-x-1/2 mt-2 rounded-md z-50 flex flex-col items-center py-3">
                   <div className="flex items-center space-x-2">
                     <p>Current Balance: </p>
-                    <p className=" font-medium ">{userInfo.balance} </p>
+                    <p className=" font-medium ">
+                      {parseFloat(userInfo.balance).toFixed(2)}{" "}
+                    </p>
                     <img src={coinIcon} alt="coin icon" className="w-4 h-4" />
                   </div>
                   <div className="w-52 h-52">
