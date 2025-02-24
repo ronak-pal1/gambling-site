@@ -78,7 +78,10 @@ const TeamCard = ({ teamPosition, teamName, players, score, odds }) => {
           <div className="bg-white w-[95%] md:w-[50%] rounded-lg text-center py-3 px-4">
             <div className="w-full flex justify-end text-2xl">
               <CloseIcon
-                onClick={() => setIsBettingModalOpen(false)}
+                onClick={() => {
+                  setIsBettingModalOpen(false);
+                  setTotalAmount(0);
+                }}
                 fontSize="inherit"
                 className="cursor-pointer"
               />
@@ -95,11 +98,23 @@ const TeamCard = ({ teamPosition, teamName, players, score, odds }) => {
                     className="mr-2"
                     onChange={(e) => {
                       if (e.target.checked)
-                        setTotalAmount((amount) => amount + 250);
-                      else setTotalAmount((amount) => amount - 250);
+                        setTotalAmount((amount) => amount + 100);
+                      else setTotalAmount((amount) => amount - 100);
                     }}
                   />
-                  <label>250/-</label>
+                  <label>100/-</label>
+                </div>
+                <div>
+                  <input
+                    type="checkbox"
+                    className="mr-2"
+                    onChange={(e) => {
+                      if (e.target.checked)
+                        setTotalAmount((amount) => amount + 200);
+                      else setTotalAmount((amount) => amount - 200);
+                    }}
+                  />
+                  <label>200/-</label>
                 </div>
                 <div>
                   <input
@@ -119,28 +134,19 @@ const TeamCard = ({ teamPosition, teamName, players, score, odds }) => {
                     className="mr-2"
                     onChange={(e) => {
                       if (e.target.checked)
-                        setTotalAmount((amount) => amount + 1500);
-                      else setTotalAmount((amount) => amount - 1500);
+                        setTotalAmount((amount) => amount + 1000);
+                      else setTotalAmount((amount) => amount - 1000);
                     }}
                   />
-                  <label>1500/-</label>
-                </div>
-                <div>
-                  <input
-                    type="checkbox"
-                    className="mr-2"
-                    onChange={(e) => {
-                      if (e.target.checked)
-                        setTotalAmount((amount) => amount + 2000);
-                      else setTotalAmount((amount) => amount - 2000);
-                    }}
-                  />
-                  <label>2000/-</label>
+                  <label>1000/-</label>
                 </div>
               </div>
 
-              <div className="my-7 items-center w-full">
+              <div className="my-7 items-center w-full space-y-3">
                 <p className="text-xl font-semibold">Total: {totalAmount}/-</p>
+                <p className="text-xl font-semibold text-blue-500">
+                  Win amount: {totalAmount * odds}/-
+                </p>
               </div>
 
               <div className="w-full flex items-center justify-center space-x-4 md:text-base text-sm">
@@ -275,7 +281,9 @@ const TeamCard = ({ teamPosition, teamName, players, score, odds }) => {
       <div className="w-full md:absolute md:bottom-7 md:left-0 flex justify-center z-10">
         <button
           onClick={() => setIsBettingModalOpen(true)}
-          className="bg-[#fee715b4] px-5 py-1 text-sm md:text-lg font-medium rounded-md w-[90%] "
+          className={`${
+            teamPosition == "left" ? "bg-red-500" : "bg-green-400"
+          } px-5 py-1 text-sm md:text-lg font-medium rounded-md w-[90%] `}
         >
           Bet Now
         </button>

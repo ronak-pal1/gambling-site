@@ -65,6 +65,12 @@ const Dashboard = () => {
 
       <div>
         <LiveAlerts />
+
+        <div className="w-full text-center">
+          <p className="text-sm text-red-400">
+            I have accepted all the Terms & Conditions
+          </p>
+        </div>
       </div>
     </div>
   );

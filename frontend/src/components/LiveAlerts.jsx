@@ -15,6 +15,7 @@ const AlertCard = ({
   endTime,
   status,
   alertId,
+  oppositeOdds,
 }) => {
   const [isAlertModalOpen, setIsAlertModalOpen] = useState(false);
   const [totalAmount, setTotalAmount] = useState(0);
@@ -68,7 +69,7 @@ const AlertCard = ({
         setIsAlertModalOpen(false);
       }
     } catch (e) {
-      showSnackbar("Error in accepting the bet", "error");
+      showSnackbar(e.response.data.message, "error");
     }
 
     setIsLoading(false);
@@ -81,7 +82,10 @@ const AlertCard = ({
           <div className="bg-white w-[90%] md:w-[50%] rounded-lg text-center py-3 px-4">
             <div className="w-full flex justify-end text-2xl">
               <CloseIcon
-                onClick={() => setIsAlertModalOpen(false)}
+                onClick={() => {
+                  setIsAlertModalOpen(false);
+                  setTotalAmount(0);
+                }}
                 fontSize="inherit"
                 className="cursor-pointer"
               />
@@ -98,11 +102,23 @@ const AlertCard = ({
                     className="mr-2"
                     onChange={(e) => {
                       if (e.target.checked)
-                        setTotalAmount((amount) => amount + 250);
-                      else setTotalAmount((amount) => amount - 250);
+                        setTotalAmount((amount) => amount + 100);
+                      else setTotalAmount((amount) => amount - 100);
                     }}
                   />
-                  <label>250/-</label>
+                  <label>100/-</label>
+                </div>
+                <div>
+                  <input
+                    type="checkbox"
+                    className="mr-2"
+                    onChange={(e) => {
+                      if (e.target.checked)
+                        setTotalAmount((amount) => amount + 200);
+                      else setTotalAmount((amount) => amount - 200);
+                    }}
+                  />
+                  <label>200/-</label>
                 </div>
                 <div>
                   <input
@@ -122,29 +138,20 @@ const AlertCard = ({
                     className="mr-2"
                     onChange={(e) => {
                       if (e.target.checked)
-                        setTotalAmount((amount) => amount + 1500);
-                      else setTotalAmount((amount) => amount - 1500);
+                        setTotalAmount((amount) => amount + 1000);
+                      else setTotalAmount((amount) => amount - 1000);
                     }}
                   />
-                  <label>1500/-</label>
-                </div>
-                <div>
-                  <input
-                    type="checkbox"
-                    className="mr-2"
-                    onChange={(e) => {
-                      if (e.target.checked)
-                        setTotalAmount((amount) => amount + 2000);
-                      else setTotalAmount((amount) => amount - 2000);
-                    }}
-                  />
-                  <label>2000/-</label>
+                  <label>1000/-</label>
                 </div>
               </div>
 
               <div className="my-7 items-center w-full">
                 <p className="text-base md:text-xl font-semibold">
                   Total: {totalAmount}/-
+                </p>
+                <p className="text-base md:text-xl font-semibold">
+                  Win amount: {totalAmount * oppositeOdds}/-
                 </p>
               </div>
             </div>
@@ -169,7 +176,8 @@ const AlertCard = ({
         onClick={() => {
           if (status == "Matched")
             showSnackbar("Bet is already matched", "info");
-          else if (status == "Pending") setIsAlertModalOpen(true);
+          else if (status == "Pending" || status == "Partial")
+            setIsAlertModalOpen(true);
         }}
         className="w-full px-4 py-3 rounded-md bg-orange-300 hover:scale-[1.01] transition-transform cursor-pointer"
       >
@@ -186,6 +194,10 @@ const AlertCard = ({
               on {team}{" "}
               <span className=" text-blue-500 ml-6 md:ml-9">Odds: {odds}x</span>
             </p>
+
+            <div className="pl-8">
+              <p className="">Total Amount: {amount * odds}/-</p>
+            </div>
           </div>
 
           <div className="bg-neutral-700 text-white px-3 py-1 rounded-full">
@@ -198,9 +210,11 @@ const AlertCard = ({
         {/*  */}
         <div className="my-3 flex items-center justify-between">
           <div className="flex items-center space-x-4 text-xs md:text-base">
-            <p className="">Sport Name: {sportName}</p>
             <p>
-              Match: {team1} vs {team2}
+              <span className="font-bold">Sport Name:</span> {sportName}
+            </p>
+            <p>
+              <span className="font-bold">Match:</span> {team1} vs {team2}
             </p>
           </div>
 
@@ -257,6 +271,7 @@ const LiveAlerts = () => {
                 team1={alert.team1}
                 team2={alert.team2}
                 alertId={alert._id}
+                oppositeOdds={alert.oppositeOdds}
               />
             ))
           )}
@@ -269,6 +284,7 @@ const LiveAlerts = () => {
             team={"test"}
             endTime={new Date()}
             matchBetween={"test"}
+            oppositeOdds={10}
           /> */}
         </div>
       </div>

@@ -2,7 +2,7 @@ import NotificationsOutlinedIcon from "@mui/icons-material/NotificationsOutlined
 import WalletOutlinedIcon from "@mui/icons-material/WalletOutlined";
 import coinIcon from "../assets/coin.svg";
 import { useEffect, useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Modal } from "@mui/material";
 import userApi from "../apis/userApi";
 import MenuIcon from "@mui/icons-material/Menu";
@@ -98,7 +98,9 @@ const Header = ({ isAuthenticated, userInfo }) => {
                 className="text-white flex items-center space-x-3 border border-white  rounded-md px-4 py-1 text-sm md:text-xl cursor-pointer active:scale-95"
               >
                 <WalletOutlinedIcon fontSize="inherit" />
-                <p>{userInfo ? userInfo.balance : "..."} </p>
+                <p className="font-bold">
+                  {userInfo ? userInfo.balance : "..."}\
+                </p>
                 <img
                   src={coinIcon}
                   alt="coin icon"
@@ -165,7 +167,7 @@ const Header = ({ isAuthenticated, userInfo }) => {
         )}
 
         <h1
-          onClick={() => navigate("/")}
+          onClick={() => navigate("/dashboard")}
           className="text-white text-xl md:text-3xl cursor-pointer"
         >
           Khelo Spardha
@@ -191,7 +193,9 @@ const Header = ({ isAuthenticated, userInfo }) => {
                 className="text-white flex items-center space-x-3 border border-white  rounded-md px-4 py-1 text-xl cursor-pointer active:scale-95"
               >
                 <WalletOutlinedIcon fontSize="inherit" />
-                <p>{userInfo ? userInfo.balance : "..."} </p>
+                <p className="font-medium">
+                  {userInfo ? userInfo.balance : "..."}{" "}
+                </p>
                 <img src={coinIcon} alt="coin icon" className="w-5 h-5" />
               </div>
 
@@ -211,6 +215,27 @@ const Header = ({ isAuthenticated, userInfo }) => {
                   </div>
 
                   <p className="text-sm">Pay using the QR to get your coins</p>
+
+                  <div className="w-full my-3 flex items-center space-x-5 px-4">
+                    <Link
+                      to={
+                        "https://docs.google.com/forms/d/e/1FAIpQLSeDm7FHsRxhZ72da5WdwxK7gqAFwZRqIuzJOXjUw-b9az-F4w/viewform?usp=sharing"
+                      }
+                      target="_blank"
+                      className="w-full text-center bg-blue-500 text-white py-1 rounded-xl"
+                    >
+                      Deposit
+                    </Link>
+                    <Link
+                      to={
+                        "https://docs.google.com/forms/d/e/1FAIpQLScr13Bzc_vAcg8btE7GA4eqUlqXXem-T5Yeegwq5TYEIBkjPA/viewform?usp=sharing"
+                      }
+                      target="_blank"
+                      className="w-full text-center bg-green-400 py-1 rounded-xl"
+                    >
+                      Withdrawal
+                    </Link>
+                  </div>
                 </div>
               )}
             </div>

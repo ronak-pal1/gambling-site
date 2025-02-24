@@ -57,8 +57,8 @@ const ModifyEventModalContent = ({ content }) => {
 
       changedInfo.team2 = {
         teamName: team2Name,
-        score: team1Score,
-        odds: team1Odd,
+        score: team2Score,
+        odds: team2Odd,
       };
 
       const res = await adminApi.post("/modify-event", {
