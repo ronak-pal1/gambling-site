@@ -198,7 +198,9 @@ const Header = ({ isAuthenticated, userInfo }) => {
       <div className="flex items-center space-x-7">
         {location.pathname != "/" && innerWidth >= 600 && (
           <>
-            <p className="text-white text-lg font-bold">Hii, {userInfo.name}</p>
+            <p className="text-white text-lg font-bold">
+              Hii, {userInfo?.name}
+            </p>
 
             <div
               className="text-white text-3xl relative cursor-pointer"
