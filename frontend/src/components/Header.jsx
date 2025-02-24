@@ -14,8 +14,8 @@ const SIDEBAR_BUTTONS = [
     route: "/transactions",
   },
   {
-    label: "Contact",
-    route: "/contact",
+    label: "FAQs",
+    route: "/faqs",
   },
   {
     label: "Terms & Conditons",
