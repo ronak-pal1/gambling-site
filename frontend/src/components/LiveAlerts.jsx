@@ -182,20 +182,20 @@ const AlertCard = ({
         className="w-full px-4 py-3 rounded-md bg-orange-300 hover:scale-[1.01] transition-transform cursor-pointer"
       >
         <div className="flex items-center justify-between">
-          <div className="flex items-center space-x-4 text-xs md:text-lg font-medium">
-            <p>Bet of</p>
-
+          <div className="flex flex-col md:flex-row items-start md:items-center space-x-0 md:space-x-4 text-xs md:text-lg font-medium space-y-3 md:space-y-0">
             <div className="flex items-center space-x-3">
+              <p>Bet of</p>
               <img src={coinSVG} className="w-5 object-contain" />
-              <p>{amount}</p>
+              <p>
+                {amount} on {team}
+              </p>
             </div>
 
             <p>
-              on {team}{" "}
-              <span className=" text-blue-500 ml-6 md:ml-9">Odds: {odds}x</span>
+              <span className=" text-blue-500 md:ml-9">Odds: {odds}x</span>
             </p>
 
-            <div className="pl-8">
+            <div className="md:pl-8">
               <p className="">Total Amount: {amount * odds}/-</p>
             </div>
           </div>
@@ -209,7 +209,7 @@ const AlertCard = ({
 
         {/*  */}
         <div className="my-3 flex items-center justify-between">
-          <div className="flex items-center space-x-4 text-xs md:text-base">
+          <div className="flex flex-col md:flex-row  items-start md:items-center text-xs md:text-base md:space-x-4 space-y-2 md:space-y-0">
             <p>
               <span className="font-bold">Sport Name:</span> {sportName}
             </p>

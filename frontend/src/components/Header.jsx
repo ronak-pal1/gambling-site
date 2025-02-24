@@ -99,7 +99,7 @@ const Header = ({ isAuthenticated, userInfo }) => {
               >
                 <WalletOutlinedIcon fontSize="inherit" />
                 <p className="font-bold">
-                  {userInfo ? userInfo.balance : "..."}\
+                  {userInfo ? userInfo.balance : "..."}
                 </p>
                 <img
                   src={coinIcon}
@@ -125,6 +125,27 @@ const Header = ({ isAuthenticated, userInfo }) => {
                   </div>
 
                   <p className="text-sm">Pay using the QR to get your coins</p>
+
+                  <div className="w-full my-3 flex items-center space-x-5 px-4">
+                    <Link
+                      to={
+                        "https://docs.google.com/forms/d/e/1FAIpQLSeDm7FHsRxhZ72da5WdwxK7gqAFwZRqIuzJOXjUw-b9az-F4w/viewform?usp=sharing"
+                      }
+                      target="_blank"
+                      className="w-full text-center bg-blue-500 text-white py-1 rounded-xl"
+                    >
+                      Deposit
+                    </Link>
+                    <Link
+                      to={
+                        "https://docs.google.com/forms/d/e/1FAIpQLScr13Bzc_vAcg8btE7GA4eqUlqXXem-T5Yeegwq5TYEIBkjPA/viewform?usp=sharing"
+                      }
+                      target="_blank"
+                      className="w-full text-center bg-green-400 py-1 rounded-xl"
+                    >
+                      Withdrawal
+                    </Link>
+                  </div>
                 </div>
               )}
             </div>
