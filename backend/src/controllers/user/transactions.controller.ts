@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import asyncHandler from "../../utils/asyncHandler";
 import { TransactionModel } from "../../models/transactions.model";
+import mongoose from "mongoose";
 
 export const transactions = asyncHandler(
   async (req: Request, res: Response) => {
@@ -9,7 +10,7 @@ export const transactions = asyncHandler(
     try {
       const transactions = await TransactionModel.aggregate([
         {
-          $match: { userId: user._id }, // Filter transactions for the specific user
+          $match: { userId: new mongoose.Types.ObjectId(user._id) }, // Filter transactions for the specific user
         },
         {
           $lookup: {

@@ -65,8 +65,8 @@ const TransactionsPage = () => {
                   transactionsBet.map((t) => (
                     <tr key={t._id}>
                       <td>{formatDate(t.createdAt)}</td>
-                      <td>{t.team}</td>
                       <td>{t.eventName}</td>
+                      <td>{t.team}</td>
                       <td className="text-blue-600">{t.odds}x</td>
                       <td>{parseFloat(t.amount).toFixed(2)}</td>
                       <td>{t.status}</td>

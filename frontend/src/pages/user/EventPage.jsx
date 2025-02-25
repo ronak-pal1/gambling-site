@@ -348,11 +348,11 @@ const EventPage = () => {
           />
         </div>
 
-        <div className="flex-[0.2] text-center space-y-4 bg-black w-full h-full py-3">
-          <h1 className=" text-xl md:text-3xl text-yellow-200 font-medium">
+        <div className="flex-[0.2] flex flex-col items-center justify-center space-y-4 bg-black w-full h-full py-3">
+          <h1 className=" text-xl md:text-3xl text-blue-600 font-medium">
             {eventInfo?.sportName}
           </h1>
-          <p className="text-white text-lg md:text-7xl">VS</p>
+          <p className="text-white text-lg md:text-5xl">VS</p>
         </div>
 
         <div className="flex-[0.4] w-full h-full [&>div]:rounded-l-lg">
