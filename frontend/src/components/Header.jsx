@@ -89,13 +89,25 @@ const Header = ({ isAuthenticated, userInfo }) => {
         } transition-transform px-3 py-3 duration-500 z-30`}
       >
         <div className="w-full flex justify-between md:justify-end">
-          {innerWidth < 600 && (
-            <div className="relative">
+          <p className="text-white text-sm font-medium">
+            Hii, {userInfo?.name}
+          </p>
+          <div
+            onClick={() => setIsSidebarOpen(false)}
+            className="text-xl md:text-3xl text-slate-300 cursor-pointer"
+          >
+            <CloseIcon color="inherit" fontSize="inherit" />
+          </div>
+        </div>
+
+        {innerWidth < 600 && (
+          <div className="relative mt-6 w-full">
+            <div className="w-full flex justify-center">
               <div
                 onClick={() => {
                   setIsCoinsPaySelected(!isCoinsPaySelected);
                 }}
-                className="text-white flex items-center space-x-3 border border-white  rounded-md px-4 py-1 text-sm md:text-xl cursor-pointer active:scale-95"
+                className="text-white flex items-center space-x-3 border border-white  rounded-md px-4 py-1 text-sm md:text-xl cursor-pointer active:scale-95 w-fit"
               >
                 <WalletOutlinedIcon fontSize="inherit" />
                 <p className="font-bold">
@@ -107,66 +119,59 @@ const Header = ({ isAuthenticated, userInfo }) => {
                   className="w-4 h-4 md:w-5 md:h-5"
                 />
               </div>
-
-              {isCoinsPaySelected && (
-                <div className="absolute bg-white w-80 h-fit translate-x-0 mt-2 rounded-md z-50 flex flex-col items-center py-3">
-                  <div className="flex items-center space-x-2">
-                    <p>Current Balance: </p>
-                    <p className=" font-medium ">
-                      {parseFloat(userInfo.balance).toFixed(2)}{" "}
-                    </p>
-                    <img src={coinIcon} alt="coin icon" className="w-4 h-4" />
-                  </div>
-                  <div className="flex items-center space-x-2">
-                    <p>Exposure amount: </p>
-                    <p className=" font-medium ">
-                      {parseFloat(userInfo.totalBetAmount).toFixed(2)}
-                    </p>
-                    <img src={coinIcon} alt="coin icon" className="w-4 h-4" />
-                  </div>
-
-                  <div className="w-52 h-52">
-                    <img
-                      src={qrURL}
-                      alt="QR code"
-                      className="w-52 object-contain"
-                    />
-                  </div>
-
-                  <p className="text-sm">Pay using the QR to get your coins</p>
-
-                  <div className="w-full my-3 flex items-center space-x-5 px-4">
-                    <Link
-                      to={
-                        "https://docs.google.com/forms/d/e/1FAIpQLSeDm7FHsRxhZ72da5WdwxK7gqAFwZRqIuzJOXjUw-b9az-F4w/viewform?usp=sharing"
-                      }
-                      target="_blank"
-                      className="w-full text-center bg-blue-500 text-white py-1 rounded-xl"
-                    >
-                      Deposit
-                    </Link>
-                    <Link
-                      to={
-                        "https://docs.google.com/forms/d/e/1FAIpQLScr13Bzc_vAcg8btE7GA4eqUlqXXem-T5Yeegwq5TYEIBkjPA/viewform?usp=sharing"
-                      }
-                      target="_blank"
-                      className="w-full text-center bg-green-400 py-1 rounded-xl"
-                    >
-                      Withdrawal
-                    </Link>
-                  </div>
-                </div>
-              )}
             </div>
-          )}
 
-          <div
-            onClick={() => setIsSidebarOpen(false)}
-            className="text-xl md:text-3xl text-slate-300 cursor-pointer"
-          >
-            <CloseIcon color="inherit" fontSize="inherit" />
+            {isCoinsPaySelected && (
+              <div className="absolute bg-white w-80 h-fit translate-x-0 mt-2 rounded-md z-50 flex flex-col items-center py-3">
+                <div className="flex items-center space-x-2">
+                  <p>Current Balance: </p>
+                  <p className=" font-medium ">
+                    {parseFloat(userInfo.balance).toFixed(2)}{" "}
+                  </p>
+                  <img src={coinIcon} alt="coin icon" className="w-4 h-4" />
+                </div>
+                <div className="flex items-center space-x-2">
+                  <p>Exposure amount: </p>
+                  <p className=" font-medium ">
+                    {parseFloat(userInfo.totalBetAmount).toFixed(2)}
+                  </p>
+                  <img src={coinIcon} alt="coin icon" className="w-4 h-4" />
+                </div>
+
+                <div className="w-52 h-52">
+                  <img
+                    src={qrURL}
+                    alt="QR code"
+                    className="w-52 object-contain"
+                  />
+                </div>
+
+                <p className="text-sm">Pay using the QR to get your coins</p>
+
+                <div className="w-full my-3 flex items-center space-x-5 px-4">
+                  <Link
+                    to={
+                      "https://docs.google.com/forms/d/e/1FAIpQLSeDm7FHsRxhZ72da5WdwxK7gqAFwZRqIuzJOXjUw-b9az-F4w/viewform?usp=sharing"
+                    }
+                    target="_blank"
+                    className="w-full text-center bg-blue-500 text-white py-1 rounded-xl"
+                  >
+                    Deposit
+                  </Link>
+                  <Link
+                    to={
+                      "https://docs.google.com/forms/d/e/1FAIpQLScr13Bzc_vAcg8btE7GA4eqUlqXXem-T5Yeegwq5TYEIBkjPA/viewform?usp=sharing"
+                    }
+                    target="_blank"
+                    className="w-full text-center bg-green-400 py-1 rounded-xl"
+                  >
+                    Withdrawal
+                  </Link>
+                </div>
+              </div>
+            )}
           </div>
-        </div>
+        )}
 
         <div className="mt-7 space-y-6">
           {SIDEBAR_BUTTONS.map((button, index) => (
@@ -181,6 +186,24 @@ const Header = ({ isAuthenticated, userInfo }) => {
               <p className="text-white text-base md:text-2xl">{button.label}</p>
             </div>
           ))}
+        </div>
+
+        <div className="w-full flex justify-center mt-5">
+          {isAuthenticated ? (
+            <button
+              onClick={() => setIsLogoutModalOpen(true)}
+              className="bg-[#FEE715] px-5 py-1 text-sm md:text-lg font-medium rounded-md"
+            >
+              Logout
+            </button>
+          ) : (
+            <button
+              onClick={() => navigate("/login")}
+              className="bg-[#FEE715] px-5 py-1 text-lg font-medium rounded-md"
+            >
+              Login
+            </button>
+          )}
         </div>
       </div>
 
@@ -204,19 +227,21 @@ const Header = ({ isAuthenticated, userInfo }) => {
 
       <div className="flex items-center space-x-7">
         {location.pathname != "/" && innerWidth >= 600 && (
+          <p className="text-white text-lg font-bold">Hii, {userInfo?.name}</p>
+        )}
+
+        <div
+          className="text-white text-xl md:text-3xl relative cursor-pointer"
+          onClick={() => navigate("/alerts")}
+        >
+          <div className="absolute -top-2 -left-2 bg-red-500 px-[7px] py-[3px] text-sm rounded-full">
+            <p className="text-white text-xs">5</p>
+          </div>
+          <NotificationsOutlinedIcon fontSize="inherit" />
+        </div>
+
+        {location.pathname != "/" && innerWidth >= 600 && (
           <>
-            <p className="text-white text-lg font-bold">
-              Hii, {userInfo?.name}
-            </p>
-
-            <div
-              className="text-white text-3xl relative cursor-pointer"
-              onClick={() => navigate("/alerts")}
-            >
-              <div className="absolute -top-0 left-0 bg-red-500 px-2 py-2 text-sm rounded-full"></div>
-              <NotificationsOutlinedIcon fontSize="inherit" />
-            </div>
-
             <div className="relative">
               <div
                 onClick={() => {
@@ -282,23 +307,23 @@ const Header = ({ isAuthenticated, userInfo }) => {
                 </div>
               )}
             </div>
-          </>
-        )}
 
-        {isAuthenticated ? (
-          <button
-            onClick={() => setIsLogoutModalOpen(true)}
-            className="bg-[#FEE715] px-5 py-1 text-sm md:text-lg font-medium rounded-md"
-          >
-            Logout
-          </button>
-        ) : (
-          <button
-            onClick={() => navigate("/login")}
-            className="bg-[#FEE715] px-5 py-1 text-lg font-medium rounded-md"
-          >
-            Login
-          </button>
+            {isAuthenticated ? (
+              <button
+                onClick={() => setIsLogoutModalOpen(true)}
+                className="bg-[#FEE715] px-5 py-1 text-sm md:text-lg font-medium rounded-md"
+              >
+                Logout
+              </button>
+            ) : (
+              <button
+                onClick={() => navigate("/login")}
+                className="bg-[#FEE715] px-5 py-1 text-lg font-medium rounded-md"
+              >
+                Login
+              </button>
+            )}
+          </>
         )}
       </div>
     </header>

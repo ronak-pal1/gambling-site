@@ -39,6 +39,8 @@ const ModifyEventModalContent = ({ content }) => {
     setTeam2Score(content.team2.score);
     setTeam1Odd(content.team1.odds);
     setTeam2Odd(content.team2.odds);
+    setIsPinned(content.isPinned);
+    setConnectedEventId(content.connectedEventId);
   }, [content]);
 
   const updateEvent = async () => {
@@ -67,7 +69,7 @@ const ModifyEventModalContent = ({ content }) => {
           setIsLoading(false);
           return;
         } else {
-          changedInfo.connectedEventId == connectedEventId;
+          changedInfo.connectedEventId = connectedEventId;
         }
       }
 

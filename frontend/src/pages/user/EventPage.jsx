@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import CloseIcon from "@mui/icons-material/Close";
 import { CircularProgress, Modal } from "@mui/material";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useSnackbar } from "../../hooks/SnackBarContext";
 import userApi from "../../apis/userApi";
 import { addMinutesToCurrentTime } from "../../utils/convertTo12Hour";
@@ -318,6 +318,8 @@ const EventPage = () => {
   const { showSnackbar } = useSnackbar();
   const { eventId } = useParams();
 
+  const navigate = useNavigate();
+
   const fetchEventInfo = async () => {
     try {
       const res = await userApi.get(`/event/${eventId}`);
@@ -348,11 +350,37 @@ const EventPage = () => {
           />
         </div>
 
-        <div className="flex-[0.2] flex flex-col items-center justify-center space-y-4 bg-black w-full h-full py-3">
-          <h1 className=" text-xl md:text-3xl text-blue-600 font-medium">
-            {eventInfo?.sportName}
-          </h1>
-          <p className="text-white text-lg md:text-5xl">VS</p>
+        <div className="flex-[0.2] flex flex-col items-center justify-between  bg-black w-full h-full py-3">
+          <div className="text-center space-y-4">
+            <h1 className=" text-xl md:text-3xl text-blue-600 font-bold">
+              {eventInfo?.sportName}
+            </h1>
+            <p className="text-white text-lg md:text-5xl">VS</p>
+          </div>
+
+          {eventInfo?.connectedEvent?.sportName && innerWidth >= 600 && (
+            <div
+              className="mx-3 my-3 rounded-md border border-blue-300 px-3 py-4 hover:bg-neutral-800 flex flex-row  md:flex-col items-center justify-center space-x-3 md:space-x-0 md:space-y-1"
+              onClick={() => {
+                navigate(`/event/${eventInfo?.connectedEvent?._id}`);
+                navigate(0);
+              }}
+            >
+              <h1 className="text-xs md:text-base font-medium text-blue-500">
+                {eventInfo?.connectedEvent?.sportName}
+              </h1>
+              <div className="flex flex-row space-x-4 md:space-x-0 md:flex-col justify-center items-center">
+                <p className="text-white text-xs md:text-base">
+                  {eventInfo?.connectedEvent?.team1?.teamName}:{" "}
+                  {eventInfo?.connectedEvent?.team1?.score}
+                </p>
+                <p className="text-white text-xs md:text-base">
+                  {eventInfo?.connectedEvent?.team2?.teamName}:{" "}
+                  {eventInfo?.connectedEvent?.team2?.score}
+                </p>
+              </div>
+            </div>
+          )}
         </div>
 
         <div className="flex-[0.4] w-full h-full [&>div]:rounded-l-lg">
@@ -364,6 +392,30 @@ const EventPage = () => {
             score={eventInfo?.team2.score}
             teamLogo={eventInfo?.team2.logo}
           />
+
+          {eventInfo?.connectedEvent?.sportName && innerWidth < 600 && (
+            <div
+              className="mx-3 my-3 rounded-md border border-blue-300 px-3 py-4 hover:bg-neutral-800 flex flex-row  md:flex-col items-center justify-center space-x-3 md:space-x-0 md:space-y-1"
+              onClick={() => {
+                navigate(`/event/${eventInfo?.connectedEvent?._id}`);
+                navigate(0);
+              }}
+            >
+              <h1 className="text-xs md:text-base font-medium text-blue-500">
+                {eventInfo?.connectedEvent?.sportName}
+              </h1>
+              <div className="flex flex-row space-x-4 md:space-x-0 md:flex-col justify-center items-center">
+                <p className="text-white text-xs md:text-base">
+                  {eventInfo?.connectedEvent?.team1?.teamName}:{" "}
+                  {eventInfo?.connectedEvent?.team1?.score}
+                </p>
+                <p className="text-white text-xs md:text-base">
+                  {eventInfo?.connectedEvent?.team2?.teamName}:{" "}
+                  {eventInfo?.connectedEvent?.team2?.score}
+                </p>
+              </div>
+            </div>
+          )}
         </div>
       </div>
     </div>
