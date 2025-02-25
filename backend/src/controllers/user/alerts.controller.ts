@@ -48,6 +48,12 @@ export const getAlerts = asyncHandler(async (req: Request, res: Response) => {
               else: "$eventDetails.team1.odds",
             },
           },
+          createdAt: 1,
+        },
+      },
+      {
+        $sort: {
+          createdAt: -1,
         },
       },
     ]);

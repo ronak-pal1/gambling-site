@@ -9,11 +9,16 @@ import { addMinutesToCurrentTime } from "../../utils/convertTo12Hour";
 const PlayerCard = ({ name, role, img }) => {
   return (
     <div className="flex items-center space-x-3">
-      <img
-        src={img}
-        alt="profile"
-        className="w-[40px] h-[40px] md:w-[50px] md:h-[50px] object-cover rounded-full"
-      />
+      <div className="w-[40px] h-[40px] md:w-[50px] md:h-[50px] rounded-full border border-l-slate-600">
+        {img && (
+          <img
+            src={img}
+            alt="profile"
+            className="w-full h-full object-cover rounded-full"
+          />
+        )}
+      </div>
+
       <div>
         <p className="text-black font-semibold text-lg md:text-xl">{name}</p>
         <p className="text-black text-xs  md:text-base font-light">{role}</p>

@@ -79,6 +79,7 @@ export const acceptBet = asyncHandler(async (req: Request, res: Response) => {
   const user = req.user;
   const alertId = req.body.alertId;
   const amount = req.body.amount;
+  const endTime = req.body.endTime;
 
   if (user.coinBalance < amount) {
     return res.status(400).json({ message: "Amount exceded" });
@@ -128,7 +129,7 @@ export const acceptBet = asyncHandler(async (req: Request, res: Response) => {
     }
 
     if (amount == 0 || alert.amount == 0)
-      return res.status(400).json({ message: "Bets can be 0" });
+      return res.status(400).json({ message: "Bets can't be 0" });
 
     const oppositeTeam =
       alert.eventData.team1.teamName == alert.team
@@ -143,7 +144,6 @@ export const acceptBet = asyncHandler(async (req: Request, res: Response) => {
     if (amount * oppositeTeam.odds > alert.amount * alert.odds)
       remainingAmount = 0;
 
-    console.log(alert.amount * alert.odds, amount * oppositeTeam.odds);
     await AlertModel.updateOne(
       {
         _id: alertId,
@@ -166,13 +166,10 @@ export const acceptBet = asyncHandler(async (req: Request, res: Response) => {
       odds: oppositeTeam.odds,
       amount:
         amount * oppositeTeam.odds > alert.amount * alert.odds
-          ? alert.amount / oppositeTeam.odds
+          ? (alert.amount * alert.odds) / oppositeTeam.odds
           : amount,
       team: oppositeTeam.teamName,
-      status:
-        alert.amount * alert.odds <= amount * oppositeTeam.odds
-          ? "Matched"
-          : "Partial",
+      status: "Matched",
       eventId: alert.eventId,
       type: TRANSAC_TYPE.bet,
     });
@@ -210,14 +207,41 @@ export const acceptBet = asyncHandler(async (req: Request, res: Response) => {
       },
       {
         $set: {
-          coinBalance:
-            user.coinBalance -
-            (amount * oppositeTeam.odds > alert.amount * alert.odds
-              ? alert.amount / oppositeTeam.odds
-              : amount),
+          coinBalance: user.coinBalance - amount,
         },
       }
     );
+
+    // for creating another alert if the accepting bet user given big amount then the generating alert user
+    if (amount * oppositeTeam.odds > alert.amount * alert.odds) {
+      const partialAmountForOppositeTeam =
+        amount - (alert.odds * alert.amount) / oppositeTeam.odds;
+
+      const partialNewTransaction = new TransactionModel({
+        userId: user._id,
+        odds: oppositeTeam.odds,
+        amount: partialAmountForOppositeTeam,
+        status: "Pending",
+        eventId: alert.eventId,
+        team: oppositeTeam.teamName,
+        type: TRANSAC_TYPE.bet,
+      });
+
+      await partialNewTransaction.save();
+
+      const partialAlert = new AlertModel({
+        by: user._id,
+        eventId: alert.eventId,
+        endTime,
+        amount: partialAmountForOppositeTeam,
+        odds: oppositeTeam.odds,
+        team: oppositeTeam.teamName,
+        previousTransactionId: partialNewTransaction._id,
+        status: "Pending",
+      });
+
+      await partialAlert.save();
+    }
 
     res.status(200).json({ message: "Bet is accepted successfully" });
   } catch (e) {

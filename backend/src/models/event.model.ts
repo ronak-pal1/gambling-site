@@ -18,6 +18,7 @@ export interface IEvent extends Document {
   prizePool: number;
   prizePoolLabel: string;
   isPinned: boolean;
+  connectedEventId: Schema.Types.ObjectId;
 }
 
 const EventSchema: Schema<IEvent> = new Schema<IEvent>(
@@ -26,6 +27,10 @@ const EventSchema: Schema<IEvent> = new Schema<IEvent>(
       type: String,
       required: true,
       trim: true,
+    },
+    connectedEventId: {
+      type: Schema.Types.ObjectId,
+      ref: "event",
     },
     team1: {
       teamName: {
@@ -47,7 +52,6 @@ const EventSchema: Schema<IEvent> = new Schema<IEvent>(
           },
           img: {
             type: String,
-            required: true,
             trim: true,
           },
         },
@@ -85,7 +89,6 @@ const EventSchema: Schema<IEvent> = new Schema<IEvent>(
           },
           img: {
             type: String,
-            required: true,
             trim: true,
           },
         },
