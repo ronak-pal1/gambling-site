@@ -93,7 +93,11 @@ const Header = ({ isAuthenticated, userInfo }) => {
             Hii, {userInfo?.name}
           </p>
           <div
-            onClick={() => setIsSidebarOpen(false)}
+            onClick={() => {
+              setIsSidebarOpen(false);
+
+              setIsCoinsPaySelected(false);
+            }}
             className="text-xl md:text-3xl text-slate-300 cursor-pointer"
           >
             <CloseIcon color="inherit" fontSize="inherit" />
