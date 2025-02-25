@@ -117,6 +117,13 @@ const Header = ({ isAuthenticated, userInfo }) => {
                     </p>
                     <img src={coinIcon} alt="coin icon" className="w-4 h-4" />
                   </div>
+                  <div className="flex items-center space-x-2">
+                    <p>Exposure amount: </p>
+                    <p className=" font-medium ">
+                      {parseFloat(userInfo.totalBetAmount).toFixed(2)}
+                    </p>
+                    <img src={coinIcon} alt="coin icon" className="w-4 h-4" />
+                  </div>
 
                   <div className="w-52 h-52">
                     <img
@@ -233,6 +240,15 @@ const Header = ({ isAuthenticated, userInfo }) => {
                     </p>
                     <img src={coinIcon} alt="coin icon" className="w-4 h-4" />
                   </div>
+
+                  <div className="flex items-center space-x-2">
+                    <p>Exposure amount: </p>
+                    <p className=" font-medium ">
+                      {parseFloat(userInfo.totalBetAmount).toFixed(2)}{" "}
+                    </p>
+                    <img src={coinIcon} alt="coin icon" className="w-4 h-4" />
+                  </div>
+
                   <div className="w-52 h-52">
                     <img
                       src={qrURL}

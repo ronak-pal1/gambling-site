@@ -4,6 +4,7 @@ import userApi from "../apis/userApi";
 import { CircularProgress, Modal } from "@mui/material";
 import { useSnackbar } from "../hooks/SnackBarContext";
 import CloseIcon from "@mui/icons-material/Close";
+import { addMinutesToCurrentTime } from "../utils/convertTo12Hour";
 
 const AlertCard = ({
   amount,
@@ -37,6 +38,8 @@ const AlertCard = ({
 
   const [timeLeft, setTimeLeft] = useState(calculateTimeLeft());
 
+  const [timing, setTiming] = useState("2m");
+
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
@@ -62,6 +65,7 @@ const AlertCard = ({
       const res = await userApi.post("/accept-bet", {
         alertId,
         amount: totalAmount,
+        endTime: addMinutesToCurrentTime(timing),
       });
 
       if (res.status == 200) {
@@ -154,6 +158,56 @@ const AlertCard = ({
                   Win amount: {(totalAmount * oppositeOdds).toFixed(2)}/-
                 </p>
               </div>
+
+              <div className="w-full flex items-center justify-center space-x-4 md:text-base text-sm">
+                <p className="text-lg font-medium">Timers: </p>
+                <div className="flex items-center space-x-4">
+                  <div>
+                    <input
+                      type="checkbox"
+                      className="mr-2"
+                      checked={timing == "2m"}
+                      onChange={(e) => {
+                        if (e.target.checked) setTiming("2m");
+                      }}
+                    />
+                    <label>2m</label>
+                  </div>
+                  <div>
+                    <input
+                      type="checkbox"
+                      className="mr-2"
+                      checked={timing == "4m"}
+                      onChange={(e) => {
+                        if (e.target.checked) setTiming("4m");
+                      }}
+                    />
+                    <label>4m</label>
+                  </div>
+                  <div>
+                    <input
+                      type="checkbox"
+                      checked={timing == "5m"}
+                      className="mr-2"
+                      onChange={(e) => {
+                        if (e.target.checked) setTiming("5m");
+                      }}
+                    />
+                    <label>5m</label>
+                  </div>
+                  <div>
+                    <input
+                      type="checkbox"
+                      className="mr-2"
+                      checked={timing == "10m"}
+                      onChange={(e) => {
+                        if (e.target.checked) setTiming("10m");
+                      }}
+                    />
+                    <label>10m</label>
+                  </div>
+                </div>
+              </div>
             </div>
 
             <button
@@ -187,7 +241,7 @@ const AlertCard = ({
               <p>Bet of</p>
               <img src={coinSVG} className="w-5 object-contain" />
               <p>
-                {amount} on {team}
+                {parseFloat(amount).toFixed(2)} on {team}
               </p>
             </div>
 

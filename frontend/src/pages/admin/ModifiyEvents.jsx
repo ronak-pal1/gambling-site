@@ -21,6 +21,8 @@ const ModifyEventModalContent = ({ content }) => {
 
   const [isPinned, setIsPinned] = useState(false);
 
+  const [connectedEventId, setConnectedEventId] = useState("");
+
   const [isLoading, setIsLoading] = useState(false);
   const [isDelReqLoading, setIsDelReqLoading] = useState(false);
   const { showSnackbar } = useSnackbar();
@@ -58,6 +60,16 @@ const ModifyEventModalContent = ({ content }) => {
         changedInfo.prizePoolLabel = prizePoolLabel;
 
       if (isPinned != content.isPinned) changedInfo.isPinned = isPinned;
+
+      if (connectedEventId != content.connectedEventId) {
+        if (connectedEventId == content._id) {
+          showSnackbar("Can't connect to the same event", "warning");
+          setIsLoading(false);
+          return;
+        } else {
+          changedInfo.connectedEventId == connectedEventId;
+        }
+      }
 
       changedInfo.team1 = {
         teamName: team1Name,
@@ -181,7 +193,7 @@ const ModifyEventModalContent = ({ content }) => {
             </div>
           </div>
 
-          {/* Time Details */}
+          {/* prize pool and is pinned Details */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
               <label className="block text-sm font-medium text-gray-700">
@@ -221,6 +233,21 @@ const ModifyEventModalContent = ({ content }) => {
                   <label>False</label>
                 </div>
               </div>
+            </div>
+          </div>
+
+          {/* connected event id Details */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+              <label className="block text-sm font-medium text-gray-700">
+                Connected Event Id
+              </label>
+              <input
+                type="text"
+                value={connectedEventId}
+                onChange={(e) => setConnectedEventId(e.target.value)}
+                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 p-2 border"
+              />
             </div>
           </div>
 
@@ -397,6 +424,18 @@ const ModifyEvents = () => {
                       className="bg-yellow-100 rounded-full px-2 py-1 text-black text-sm mx-3 cursor-pointer active:scale-95 transition-transform"
                     >
                       Edit
+                    </div>
+                  </td>
+
+                  <td>
+                    <div
+                      onClick={() => {
+                        navigator.clipboard.writeText(event._id);
+                        showSnackbar("Event id is copied", "success");
+                      }}
+                      className="bg-blue-200 rounded-full px-1 py-1 text-black text-sm mx-3 cursor-pointer active:scale-95 transition-transform"
+                    >
+                      Copy Id
                     </div>
                   </td>
                 </tr>
