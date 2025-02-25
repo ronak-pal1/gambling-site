@@ -89,9 +89,12 @@ const Header = ({ isAuthenticated, userInfo, alertCount }) => {
         } transition-transform px-3 py-3 duration-500 z-30`}
       >
         <div className="w-full flex justify-between md:justify-end">
-          <p className="text-white text-sm font-medium">
-            Hii, {userInfo?.name}
-          </p>
+          {innerWidth < 600 && (
+            <p className="text-white text-sm font-medium">
+              Hii, {userInfo?.name}
+            </p>
+          )}
+
           <div
             onClick={() => {
               setIsSidebarOpen(false);
