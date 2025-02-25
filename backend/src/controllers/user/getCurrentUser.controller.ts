@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import asyncHandler from "../../utils/asyncHandler";
 import { UserModel } from "../../models/user.model";
+import { AlertModel } from "../../models/alerts.model";
 
 export const getCurrentUser = asyncHandler(
   async (req: Request, res: Response) => {
@@ -44,9 +45,21 @@ export const getCurrentUser = asyncHandler(
         },
       ]);
 
+      const alerts = await AlertModel.aggregate([
+        {
+          $match: {
+            endTime: { $gt: new Date() }, // Filters alerts where endTime is in the future
+          },
+        },
+        {
+          $count: "activeAlerts", // Counts the matching alerts
+        },
+      ]);
+
       res.status(200).json({
         message: "User details fetched",
         user: user[0],
+        alertCount: alerts.length > 0 ? alerts[0].activeAlerts : 0,
       });
     } catch (e) {
       res

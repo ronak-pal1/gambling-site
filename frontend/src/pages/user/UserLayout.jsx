@@ -7,6 +7,7 @@ const UserLayout = () => {
   const navigate = useNavigate();
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [userInfo, setUserInfo] = useState(undefined);
+  const [alertCount, setAlertCount] = useState(0);
 
   const getUser = async () => {
     try {
@@ -15,6 +16,7 @@ const UserLayout = () => {
       if (res.status == 200) {
         setIsAuthenticated(true);
         setUserInfo(res.data.user);
+        setAlertCount(res.data.alertCount);
       } else {
         navigate("/login");
       }
@@ -30,7 +32,11 @@ const UserLayout = () => {
   return (
     <div className="w-full h-screen flex flex-1 flex-col overflow-y-hidden">
       <div className="flex-[0.05] md:flex-[0.1] h-full">
-        <Header isAuthenticated={isAuthenticated} userInfo={userInfo} />
+        <Header
+          isAuthenticated={isAuthenticated}
+          userInfo={userInfo}
+          alertCount={alertCount}
+        />
       </div>
 
       <div className="flex-[0.95] md:flex-[0.9] h-full overflow-y-scroll">

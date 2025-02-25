@@ -23,7 +23,7 @@ const SIDEBAR_BUTTONS = [
   },
 ];
 
-const Header = ({ isAuthenticated, userInfo }) => {
+const Header = ({ isAuthenticated, userInfo, alertCount }) => {
   const [isCoinsPaySelected, setIsCoinsPaySelected] = useState(false);
   const navigate = useNavigate();
   const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
@@ -239,7 +239,7 @@ const Header = ({ isAuthenticated, userInfo }) => {
           onClick={() => navigate("/alerts")}
         >
           <div className="absolute -top-2 -left-2 bg-red-500 px-[7px] py-[3px] text-sm rounded-full">
-            <p className="text-white text-xs">5</p>
+            <p className="text-white text-xs">{alertCount}</p>
           </div>
           <NotificationsOutlinedIcon fontSize="inherit" />
         </div>
