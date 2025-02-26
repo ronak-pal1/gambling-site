@@ -1,8 +1,48 @@
+import { Link } from "react-router-dom";
+import telegramIcon from "../../assets/telegramIcon.svg";
+import instagramIcon from "../../assets/instagramIcon.svg";
+
 const FAQsPage = () => {
   return (
     <div className="w-full h-full overflow-y-scroll">
       <div className="max-w-4xl mx-auto p-6 bg-gray-100 shadow-md rounded-lg text-gray-700 sm:p-8 md:p-10 lg:p-12 ">
         <h1 className="text-xl font-bold text-center mb-6 sm:text-lg">FAQS</h1>
+
+        <div className="w-full h-full flex flex-col items-center justify-center">
+          <iframe
+            width={innerWidth > 600 ? "430.76" : "373.32"}
+            height={innerWidth > 600 ? "242.3" : "209.99"}
+            src="https://youtube.com/embed/cH1Jbf80ieo?feature=share"
+            title="YouTube video player"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            referrerPolicy="strict-origin-when-cross-origin"
+            allowFullScreen
+          ></iframe>
+
+          <div className="w-fit my-5 space-y-3 text-center">
+            <p className="text-sm font-bold">Get in touch</p>
+            <div className="flex items-center space-x-5">
+              <Link to={"https://t.me/khelospardha2025"} target="_blank">
+                <img
+                  src={telegramIcon}
+                  alt="telegram icon"
+                  className="w-10 object-contain"
+                />
+              </Link>
+
+              <Link
+                to={"https://www.instagram.com/khelospardha/"}
+                target="_blank"
+              >
+                <img
+                  src={instagramIcon}
+                  alt="telegram icon"
+                  className="w-10 object-contain"
+                />
+              </Link>
+            </div>
+          </div>
+        </div>
 
         <h2 className="text-lg font-semibold mt-4 sm:text-base">
           1. Who are we and what is this?
