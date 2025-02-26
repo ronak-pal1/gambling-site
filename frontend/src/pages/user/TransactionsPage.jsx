@@ -2,20 +2,32 @@ import { formatDate } from "../../utils/formatDate";
 import coinSVG from "../../assets/coin.svg";
 import { useEffect, useState } from "react";
 import userApi from "../../apis/userApi";
+import { Pagination, useStepContext } from "@mui/material";
 
 const TransactionsPage = () => {
   const [transactionsCoinBuy, setTransactionsCoinBuy] = useState([]);
   const [transactionsBet, setTransactionsBet] = useState([]);
 
-  const fetchTransactions = async () => {
+  const [totalBets, setTotalBets] = useState(0);
+  const [totalCoinBuy, setTotalCoinBuy] = useState(0);
+
+  const [betsCurrentPage, setBetsCurrentPage] = useState(1);
+  const [coinBuyCurrentPage, setCoinBuyCurrentPage] = useState(1);
+
+  const fetchTransactions = async (type, pageNo) => {
     try {
-      const res = await userApi.get(`/transactions`);
+      const res = await userApi.get(
+        `/transactions?type=${type}&pageno=${pageNo}`
+      );
 
       if (res.status == 200) {
-        const transac = res.data.transactions;
-
-        setTransactionsCoinBuy(transac.filter((t) => t.type == "coinbuy"));
-        setTransactionsBet(transac.filter((t) => t.type == "bet"));
+        if (type == "bet") {
+          setTransactionsBet(res.data.transactions);
+          setTotalBets(res.data.totalTransactions);
+        } else if (type == "coinbuy") {
+          setTransactionsCoinBuy(res.data.transactions);
+          setTotalCoinBuy(res.data.totalTransactions);
+        }
       }
     } catch (e) {
       showSnackbar("Error in fetching the transactions", "error");
@@ -23,8 +35,12 @@ const TransactionsPage = () => {
   };
 
   useEffect(() => {
-    fetchTransactions();
-  }, []);
+    fetchTransactions("bet", betsCurrentPage);
+  }, [betsCurrentPage]);
+
+  useEffect(() => {
+    fetchTransactions("coinbuy", coinBuyCurrentPage);
+  }, [coinBuyCurrentPage]);
 
   return (
     <div className="w-full h-full flex items-center justify-center">
@@ -69,7 +85,7 @@ const TransactionsPage = () => {
                       <td>{t.team}</td>
                       <td className="text-blue-600">{t.odds}x</td>
                       <td>{parseFloat(t.amount).toFixed(2)}</td>
-                      <td>{t.status}</td>
+                      <td>{t.isSettled ? "Settled" : t.status}</td>
                     </tr>
                   ))}
               </tbody>
@@ -80,6 +96,23 @@ const TransactionsPage = () => {
                 <p className="text-slate-400">No bets done</p>
               </div>
             )}
+
+            <div className="w-full flex justify-center my-6">
+              <Pagination
+                count={Math.ceil(totalBets / 10)}
+                page={betsCurrentPage}
+                onChange={(_e, value) => {
+                  setBetsCurrentPage(value);
+                }}
+                variant="outlined"
+                color="primary"
+                sx={{
+                  "& .MuiPaginationItem-root": {
+                    color: "white",
+                  },
+                }}
+              />
+            </div>
           </div>
 
           <div>
@@ -119,6 +152,23 @@ const TransactionsPage = () => {
                 <p className="text-slate-400">No coin purchase history</p>
               </div>
             )}
+
+            <div className="w-full flex justify-center py-6">
+              <Pagination
+                count={Math.ceil(totalCoinBuy / 10)}
+                page={coinBuyCurrentPage}
+                onChange={(_e, value) => {
+                  setCoinBuyCurrentPage(value);
+                }}
+                variant="outlined"
+                color="primary"
+                sx={{
+                  "& .MuiPaginationItem-root": {
+                    color: "white",
+                  },
+                }}
+              />
+            </div>
           </div>
         </div>
       </div>

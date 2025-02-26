@@ -23,6 +23,8 @@ const ModifyEventModalContent = ({ content }) => {
 
   const [connectedEventId, setConnectedEventId] = useState("");
 
+  const [winningTeam, setWinningTeam] = useState("");
+
   const [isLoading, setIsLoading] = useState(false);
   const [isDelReqLoading, setIsDelReqLoading] = useState(false);
   const { showSnackbar } = useSnackbar();
@@ -41,6 +43,7 @@ const ModifyEventModalContent = ({ content }) => {
     setTeam2Odd(content.team2.odds);
     setIsPinned(content.isPinned);
     setConnectedEventId(content.connectedEventId);
+    setWinningTeam(content.winningTeam);
   }, [content]);
 
   const updateEvent = async () => {
@@ -72,6 +75,9 @@ const ModifyEventModalContent = ({ content }) => {
           changedInfo.connectedEventId = connectedEventId;
         }
       }
+
+      if (winningTeam != content.winningTeam)
+        changedInfo.winningTeam = winningTeam;
 
       changedInfo.team1 = {
         teamName: team1Name,
@@ -251,6 +257,24 @@ const ModifyEventModalContent = ({ content }) => {
                 className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 p-2 border"
               />
             </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700">
+                Select a winnning Team
+              </label>
+
+              <select
+                className="w-full mt-1 text-sm p-2 border border-gray-300"
+                value={winningTeam}
+                onChange={(e) => {
+                  setWinningTeam(e.target.value);
+                }}
+              >
+                <option value={""}>Not decided</option>
+                <option value={"team1"}>Team1</option>
+                <option value={"team2"}>Team2</option>
+              </select>
+            </div>
           </div>
 
           {/* Teams Section */}
@@ -265,6 +289,7 @@ const ModifyEventModalContent = ({ content }) => {
                   </label>
                   <input
                     type="text"
+                    disabled
                     value={team1Name}
                     onChange={(e) => setTeam1Name(e.target.value)}
                     className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 p-2 border"
@@ -306,6 +331,7 @@ const ModifyEventModalContent = ({ content }) => {
                   <input
                     type="text"
                     value={team2Name}
+                    disabled
                     onChange={(e) => setTeam2Name(e.target.value)}
                     className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 p-2 border"
                   />
