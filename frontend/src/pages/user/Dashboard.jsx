@@ -40,7 +40,7 @@ const Dashboard = () => {
           </button>
         </div>
 
-        <div className="flex md:flex-wrap  overflow-x-scroll md:overflow-x-hidden md:overflow-y-hidden  gap-0 md:gap-6">
+        <div className="flex md:flex-wrap  overflow-x-scroll w-full md:overflow-x-hidden md:overflow-y-hidden  gap-0 md:gap-6">
           {ongoingEvents.length != 0 ? (
             innerWidth >= 600 ? (
               ongoingEvents?.map((event) => (
@@ -55,11 +55,11 @@ const Dashboard = () => {
                   team1Name={event.team1Name}
                   team2Name={event.team2Name}
                   prizePoolLabel={event.prizePoolLabel}
-                  width="100%"
+                  width="400px"
                 />
               ))
             ) : (
-              <div className="flex flex-col gap-y-6">
+              <div className="flex flex-col gap-y-6 w-full">
                 <div className="flex gap-6 w-full">
                   {ongoingEvents
                     .slice(0, Math.ceil(ongoingEvents.length / 2))
@@ -75,7 +75,7 @@ const Dashboard = () => {
                         team1Name={event.team1Name}
                         team2Name={event.team2Name}
                         prizePoolLabel={event.prizePoolLabel}
-                        width="85%"
+                        width={innerWidth.length > 2 ? "85%" : "100%"}
                       />
                     ))}
                 </div>
@@ -94,7 +94,7 @@ const Dashboard = () => {
                         team1Name={event.team1Name}
                         team2Name={event.team2Name}
                         prizePoolLabel={event.prizePoolLabel}
-                        width="85%"
+                        width={innerWidth.length > 2 ? "85%" : "100%"}
                       />
                     ))}
                 </div>

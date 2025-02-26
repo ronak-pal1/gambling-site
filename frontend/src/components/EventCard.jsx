@@ -20,7 +20,10 @@ const EventCard = ({
   return (
     <div
       onClick={() => navigate(`/event/${eventId}`)}
-      className={`bg-blue-500 w-[${width}] md:w-[400px] px-2 py-3 md:px-3 md:py-5 rounded-md text-white transition-transform hover:scale-105 cursor-pointer flex-shrink-0`}
+      className={`bg-blue-500 px-2 py-3 md:px-3 md:py-5 rounded-md text-white transition-transform hover:scale-105 cursor-pointer flex-shrink-0`}
+      style={{
+        width,
+      }}
     >
       <div className=" flex items-center justify-between text-base md:text-2xl">
         <h1 className="  font-medium">{sportName}</h1>
