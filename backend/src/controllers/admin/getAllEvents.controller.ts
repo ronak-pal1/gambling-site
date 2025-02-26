@@ -15,6 +15,7 @@ export const getAllEvents = asyncHandler(
         prizePoolLabel: 1,
         isPinned: 1,
         connectedEventId: 1,
+        winningTeam: 1,
       });
 
       res.status(200).json({ message: "Events fetched successfully", events });

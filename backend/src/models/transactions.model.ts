@@ -15,6 +15,7 @@ export interface ITransaction extends Document {
   odds: number;
   type: TRANSAC_TYPE;
   status: string;
+  isSettled: boolean;
 }
 
 const TransactionSchema: Schema<ITransaction> = new Schema<ITransaction>(
@@ -45,6 +46,10 @@ const TransactionSchema: Schema<ITransaction> = new Schema<ITransaction>(
     status: {
       type: String,
       trim: true,
+    },
+    isSettled: {
+      type: Boolean,
+      default: false,
     },
   },
   {

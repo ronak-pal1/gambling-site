@@ -8,6 +8,12 @@ type Team = {
   logo: string;
 };
 
+enum WINNING_TEAMS {
+  team1 = "team1",
+  team2 = "team2",
+  notdecided = "",
+}
+
 export interface IEvent extends Document {
   sportName: string;
   team1: Team;
@@ -19,6 +25,7 @@ export interface IEvent extends Document {
   prizePoolLabel: string;
   isPinned: boolean;
   connectedEventId: Schema.Types.ObjectId;
+  winningTeam: WINNING_TEAMS;
 }
 
 const EventSchema: Schema<IEvent> = new Schema<IEvent>(
@@ -132,6 +139,12 @@ const EventSchema: Schema<IEvent> = new Schema<IEvent>(
     isPinned: {
       type: Boolean,
       default: false,
+    },
+
+    winningTeam: {
+      type: String,
+      enum: Object.values(WINNING_TEAMS),
+      default: WINNING_TEAMS.notdecided,
     },
   },
   {

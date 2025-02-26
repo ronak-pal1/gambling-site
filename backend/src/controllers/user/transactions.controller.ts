@@ -6,11 +6,16 @@ import mongoose from "mongoose";
 export const transactions = asyncHandler(
   async (req: Request, res: Response) => {
     const user = req.user;
+    const transactionType = req.query.type;
+    const pageNo = req.query.pageno ? parseInt(req.query.pageno as string) : 1;
 
     try {
       const transactions = await TransactionModel.aggregate([
         {
-          $match: { userId: new mongoose.Types.ObjectId(user._id) }, // Filter transactions for the specific user
+          $match: {
+            userId: new mongoose.Types.ObjectId(user._id),
+            type: transactionType,
+          }, // Filter transactions for the specific user
         },
         {
           $lookup: {
@@ -38,16 +43,30 @@ export const transactions = asyncHandler(
             team: 1,
             status: 1,
             odds: 1,
+            isSettled: 1,
           },
         },
         {
           $sort: { createdAt: -1 }, // Sorts by date in ascending order
         },
+        {
+          $skip: (pageNo - 1) * 10, // Skip previous pages
+        },
+        {
+          $limit: 10, // Limit the results to 10 per page
+        },
       ]);
 
-      res
-        .status(200)
-        .json({ message: "User transactions are fetched", transactions });
+      const totalTransactions = await TransactionModel.countDocuments({
+        userId: user._id,
+        type: transactionType,
+      });
+
+      res.status(200).json({
+        message: "User transactions are fetched",
+        transactions,
+        totalTransactions,
+      });
     } catch (e) {
       return res
         .status(500)
