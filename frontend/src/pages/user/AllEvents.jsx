@@ -24,8 +24,8 @@ const AllEvents = () => {
   }, []);
 
   return (
-    <div className="w-full h-full md:px-10 md:py-7 p-4 overflow-y-auto  pb-24 custom-scrollbar space-y-14">
-      <h1 className="text-white text-lg md:text-2xl mb-4 md:mb-7 font-medium">
+    <div className="w-full h-full md:px-10 md:py-7 p-4 overflow-y-auto  pb-24 custom-scrollbar space-y-7 md:space-y-14">
+      <h1 className="text-white text-lg md:text-2xl md:mb-7 font-medium">
         All Events
       </h1>
 
@@ -42,6 +42,7 @@ const AllEvents = () => {
             team1Name={event.team1Name}
             team2Name={event.team2Name}
             prizePoolLabel={event.prizePoolLabel}
+            width="100%"
           />
         ))}
 

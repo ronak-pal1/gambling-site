@@ -40,22 +40,66 @@ const Dashboard = () => {
           </button>
         </div>
 
-        <div className="flex flex-wrap gap-6">
+        <div className="flex md:flex-wrap  overflow-x-scroll md:overflow-x-hidden md:overflow-y-hidden  gap-0 md:gap-6">
           {ongoingEvents.length != 0 ? (
-            ongoingEvents?.map((event) => (
-              <EventCard
-                key={event._id}
-                sportName={event.sportName}
-                date={event.date}
-                startTime={event.startTime}
-                endTime={event.endTime}
-                eventId={event._id}
-                prizePool={event.prizePool}
-                team1Name={event.team1Name}
-                team2Name={event.team2Name}
-                prizePoolLabel={event.prizePoolLabel}
-              />
-            ))
+            innerWidth >= 600 ? (
+              ongoingEvents?.map((event) => (
+                <EventCard
+                  key={event._id}
+                  sportName={event.sportName}
+                  date={event.date}
+                  startTime={event.startTime}
+                  endTime={event.endTime}
+                  eventId={event._id}
+                  prizePool={event.prizePool}
+                  team1Name={event.team1Name}
+                  team2Name={event.team2Name}
+                  prizePoolLabel={event.prizePoolLabel}
+                  width="100%"
+                />
+              ))
+            ) : (
+              <div className="flex flex-col gap-y-6">
+                <div className="flex gap-6 w-full">
+                  {ongoingEvents
+                    .slice(0, Math.ceil(ongoingEvents.length / 2))
+                    ?.map((event) => (
+                      <EventCard
+                        key={event._id}
+                        sportName={event.sportName}
+                        date={event.date}
+                        startTime={event.startTime}
+                        endTime={event.endTime}
+                        eventId={event._id}
+                        prizePool={event.prizePool}
+                        team1Name={event.team1Name}
+                        team2Name={event.team2Name}
+                        prizePoolLabel={event.prizePoolLabel}
+                        width="85%"
+                      />
+                    ))}
+                </div>
+                <div className="flex gap-6 w-full">
+                  {ongoingEvents
+                    .slice(Math.ceil(ongoingEvents.length / 2))
+                    ?.map((event) => (
+                      <EventCard
+                        key={event._id}
+                        sportName={event.sportName}
+                        date={event.date}
+                        startTime={event.startTime}
+                        endTime={event.endTime}
+                        eventId={event._id}
+                        prizePool={event.prizePool}
+                        team1Name={event.team1Name}
+                        team2Name={event.team2Name}
+                        prizePoolLabel={event.prizePoolLabel}
+                        width="85%"
+                      />
+                    ))}
+                </div>
+              </div>
+            )
           ) : (
             <div className="w-full py-6 text-center">
               <p className="text-slate-300">No ongoing events</p>
